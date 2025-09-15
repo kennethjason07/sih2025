@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Auth Forms</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Add favicon -->
+    <link rel="icon" type="image/x-icon" href="logo/logo.ico">
+    <!-- Font Awesome removed as per user request -->
+</head>
+<body>
+    <header class="header-gradient slide-in-down">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="header-logo">
+                <div class="header-text">
+                    <h1 class="fade-in">SIH 2025 Auth Forms Test</h1>
+                    <p class="fade-in">Testing authentication forms</p>
+                    <p class="made-by">Made by Maximus Consultancy Services</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div id="app">
+        <!-- Login/Signup will be loaded here -->
+    </div>
+    
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Main App Script -->
+    <script src="scripts/main.js"></script>
+    
+    <script>
+        // Test function to verify forms are clean
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait a bit for the form to load
+            setTimeout(function() {
+                const emailInput = document.getElementById('email');
+                const passwordInput = document.getElementById('password');
+                
+                if (emailInput && passwordInput) {
+                    console.log('Email input value:', emailInput.value);
+                    console.log('Password input value:', passwordInput.value);
+                    
+                    // Clear any values that might be there
+                    emailInput.value = '';
+                    passwordInput.value = '';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

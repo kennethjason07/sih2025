@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Graduation Cap Dynamic Icon</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome removed as per user request -->
+    <style>
+        body {
+            padding: 2rem;
+            background-color: #f1f5f9;
+        }
+        .test-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .explanation {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-gradient slide-in-down">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="header-logo">
+                <div class="header-text">
+                    <h1 class="fade-in">SIH 2025 Graduation Cap Test</h1>
+                    <p class="fade-in">Testing dynamic behavior of graduation cap inputs</p>
+                    <p class="made-by">Made by Maximus Consultancy Services</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="test-container">
+        <div class="explanation">
+            <h2>Test Graduation Cap Dynamic Icon</h2>
+            <p>This page tests the dynamic behavior specifically for the <code>.fa-graduation-cap</code> icon.</p>
+        </div>
+        
+        <div class="card scale-in">
+            <div class="card-header">
+                <h2>Graduation Cap Icon Test</h2>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="stream">Stream</label>
+                    <div class="input-group">
+                        <input type="text" id="stream" placeholder="e.g., CSE, ECE, ME">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="degree">Degree</label>
+                    <div class="input-group">
+                        <input type="text" id="degree" placeholder="e.g., B.Tech, M.Tech">
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-enhanced">Test Button</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Target specifically the graduation cap inputs
+            const graduationCapInputs = document.querySelectorAll('input[id="stream"], input[id="degree"]');
+            
+            graduationCapInputs.forEach(input => {
+                // Handle input event
+                input.addEventListener('input', function() {
+                    if (this.value.length > 0) {
+                        // Remove placeholder
+                        this.removeAttribute('placeholder');
+                    } else {
+                        // Restore placeholder based on input ID
+                        if (this.id === 'stream') {
+                            this.setAttribute('placeholder', 'e.g., CSE, ECE, ME');
+                        } else if (this.id === 'degree') {
+                            this.setAttribute('placeholder', 'e.g., B.Tech, M.Tech');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Team Registration Dynamic Icons</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Add favicon -->
+    <link rel="icon" type="image/x-icon" href="logo/logo.ico">
+    <style>
+        body {
+            padding: 2rem;
+            background-color: #f1f5f9;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .explanation {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-gradient slide-in-down">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="header-logo">
+                <div class="header-text">
+                    <h1 class="fade-in">SIH 2025 Team Registration Verification</h1>
+                    <p class="fade-in">Verifying dynamic behavior in team registration</p>
+                    <p class="made-by">Made by Maximus Consultancy Services</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="test-container">
+        <div class="explanation">
+            <h2>Verify Team Registration Dynamic Icons</h2>
+            <p>This page verifies that the dynamic icon behavior is working correctly in the team registration form.</p>
+        </div>
+        
+        <div class="card scale-in">
+            <div class="card-header">
+                <h2>Team Registration Form</h2>
+            </div>
+            <form id="teamRegistrationForm">
+                <div class="form-group">
+                    <label for="teamName" class="required">Team Name (Unique)</label>
+                    <div class="input-group">
+                        <input type="text" id="teamName" required placeholder="Enter your team name">
+                    </div>
+                </div>
+                
+                <!-- Leader Details -->
+                <div class="card scale-in">
+                    <div class="card-header">
+                        <h3>Leader Details</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="leaderName" class="required">Full Name</label>
+                        <div class="input-group">
+                            <input type="text" id="leaderName" required placeholder="Enter leader's full name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="leaderStream" class="required">Stream</label>
+                            <div class="input-group">
+                                <input type="text" id="leaderStream" required placeholder="e.g., CSE, ECE, ME">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="leaderEmail" class="required">Email ID</label>
+                        <div class="input-group">
+                            <input type="email" id="leaderEmail" required placeholder="leader@example.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="leaderMobile" class="required">Mobile No.</label>
+                        <div class="input-group">
+                            <input type="tel" id="leaderMobile" required placeholder="Enter mobile number">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Members -->
+                <div class="card scale-in">
+                    <div class="card-header">
+                        <h3>Team Members</h3>
+                    </div>
+                    <div id="membersContainer">
+                        <div class="member-row">
+                            <div class="form-group">
+                                <label>Member 1 Full Name</label>
+                                <div class="input-group">
+                                    <input type="text" placeholder="Member Name" class="member-name" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Stream</label>
+                                    <div class="input-group">
+                                        <input type="text" placeholder="Stream" class="member-stream" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Email ID</label>
+                                <div class="input-group">
+                                    <input type="email" placeholder="Member Email" class="member-email" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Mobile No.</label>
+                                <div class="input-group">
+                                    <input type="tel" placeholder="Member Mobile" class="member-mobile" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="addMemberBtn" class="btn btn-secondary btn-small">
+                        Add Another Member
+                    </button>
+                </div>
+                
+                <button type="button" class="btn btn-success btn-enhanced">
+                    Save Team Details
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Add dynamic icon and placeholder behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners to all input fields with icons
+            function addInputListeners() {
+                const inputGroups = document.querySelectorAll('.input-group');
+                
+                inputGroups.forEach(group => {
+                    const input = group.querySelector('input');
+                    const icon = group.querySelector('i');
+                    
+                    if (input && icon) {
+                        // Handle input event
+                        input.addEventListener('input', function() {
+                            if (this.value.length > 0) {
+                                icon.style.opacity = '0';
+                                this.removeAttribute('placeholder');
+                            } else {
+                                icon.style.opacity = '1';
+                                // Restore original placeholder based on input field
+                                if (this.id === 'teamName') {
+                                    this.setAttribute('placeholder', 'Enter your team name');
+                                } else if (this.id === 'leaderName' || this.classList.contains('member-name')) {
+                                    this.setAttribute('placeholder', this.id === 'leaderName' ? 'Enter leader\'s full name' : 'Member Name');
+                                } else if (this.id === 'leaderStream' || this.classList.contains('member-stream')) {
+                                    this.setAttribute('placeholder', this.id === 'leaderStream' ? 'e.g., CSE, ECE, ME' : 'Stream');
+                                } else if (this.id === 'leaderEmail' || this.classList.contains('member-email')) {
+                                    this.setAttribute('placeholder', this.id === 'leaderEmail' ? 'leader@example.com' : 'Member Email');
+                                } else if (this.id === 'leaderMobile' || this.classList.contains('member-mobile')) {
+                                    this.setAttribute('placeholder', this.id === 'leaderMobile' ? 'Enter mobile number' : 'Member Mobile');
+                                } else if (this.classList.contains('member-name')) {
+                                    this.setAttribute('placeholder', 'Member Name');
+                                } else if (this.classList.contains('member-stream')) {
+                                    this.setAttribute('placeholder', 'Stream');
+                                } else if (this.classList.contains('member-email')) {
+                                    this.setAttribute('placeholder', 'Member Email');
+                                } else if (this.classList.contains('member-mobile')) {
+                                    this.setAttribute('placeholder', 'Member Mobile');
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+            
+            // Initial setup
+            addInputListeners();
+            
+            // Handle dynamically added member fields
+            const addMemberBtn = document.getElementById('addMemberBtn');
+            if (addMemberBtn) {
+                addMemberBtn.addEventListener('click', function() {
+                    const container = document.getElementById('membersContainer');
+                    const memberCount = container.querySelectorAll('.member-row').length + 1;
+                    const memberRow = document.createElement('div');
+                    memberRow.className = 'member-row';
+                    memberRow.innerHTML = `
+                        <div class="form-group">
+                            <label>Member ${memberCount} Full Name</label>
+                            <div class="input-group">
+                                <i class="fas fa-user icon"></i>
+                                <input type="text" placeholder="Member Name" class="member-name" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Stream</label>
+                                <div class="input-group">
+                                    <i class="fas fa-graduation-cap icon"></i>
+                                    <input type="text" placeholder="Stream" class="member-stream" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Email ID</label>
+                            <div class="input-group">
+                                <i class="fas fa-envelope icon"></i>
+                                <input type="email" placeholder="Member Email" class="member-email" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Mobile No.</label>
+                            <div class="input-group">
+                                <i class="fas fa-phone icon"></i>
+                                <input type="tel" placeholder="Member Mobile" class="member-mobile" required>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(memberRow);
+                    
+                    // Add listeners to the new inputs
+                    setTimeout(addInputListeners, 100);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

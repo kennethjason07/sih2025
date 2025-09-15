@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SIH 2025 Portal</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Add favicon -->
+    <link rel="icon" type="image/x-icon" href="logo/logo.ico">
+    <!-- Font Awesome removed as per user request -->
+</head>
+<body>
+    <div class="dashboard fade-in">
+        <div class="sidebar slide-in-left">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="sidebar-logo">
+                </div>
+                <h2 class="fade-in">SIH 2025 Portal</h2>
+                <p class="made-by-sidebar">Made by Maximus Consultancy Services</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="active" data-view="team" class="fade-in">
+                    Team Registration
+                </a>
+                <a href="#" data-view="announcements" class="fade-in">
+                    Announcements
+                </a>
+                <a href="#" data-view="resources" class="fade-in">
+                    Resources
+                </a>
+                <a href="#" id="adminLink" data-view="admin" style="display: none;" class="fade-in">
+                    Admin Panel
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-danger pulse-animation">
+                    Logout
+                </button>
+            </div>
+        </div>
+        <div class="main-content slide-in-right">
+            <div class="dashboard-header">
+                <h1 class="fade-in">Leader Dashboard</h1>
+                <div class="user-info">
+                    <p class="fade-in">Welcome, <span id="userEmail">user@example.com</span></p>
+                </div>
+            </div>
+            <div id="dashboard-content" class="fade-in">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="scripts/dashboard.js"></script>
+</body>
+</html>

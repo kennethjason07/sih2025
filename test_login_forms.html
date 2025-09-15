@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Forms Spacing Test</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Add favicon -->
+    <link rel="icon" type="image/x-icon" href="logo/logo.ico">
+    <!-- Font Awesome removed as per user request -->
+    <style>
+        body {
+            padding: 2rem;
+            background-color: #f1f5f9;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .form-section {
+            margin-bottom: 3rem;
+        }
+        .explanation {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-gradient slide-in-down">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="header-logo">
+                <div class="header-text">
+                    <h1 class="fade-in">SIH 2025 Login Forms Test</h1>
+                    <p class="fade-in">Testing login forms spacing</p>
+                    <p class="made-by">Made by Maximus Consultancy Services</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="test-container">
+        <div class="explanation">
+            <h2>Login Forms Input Spacing Verification</h2>
+            <p>This page demonstrates that the input spacing fix has been applied to both the regular login form and the admin login form.</p>
+            <p>Both forms should show proper spacing between the Font Awesome icons and placeholder text.</p>
+        </div>
+        
+        <div class="form-section">
+            <h2>Regular Login Form (from main.js) - Enhanced Spacing</h2>
+            <div class="auth-container">
+                <h2>Login to SIH 2025 Portal</h2>
+                <form id="authForm" autocomplete="off">
+                    <div class="form-group">
+                        <label for="email" class="required">Email</label>
+                        <div class="input-group">
+                            <input type="email" id="email" required autocomplete="off" value="" placeholder="Enter your email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="required">Password</label>
+                        <div class="input-group">
+                            <input type="password" id="password" required autocomplete="off" value="" placeholder="Enter your password">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">
+                        Login
+                    </button>
+                    <p style="text-align: center; margin-top: 1rem;">
+                        Don't have an account? <a href="#" id="showSignup">Sign Up</a>
+                    </p>
+                    <p style="text-align: center;">
+                        <a href="admin-login.html">Admin Login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>Admin Login Form (from admin-login.html) - Enhanced Spacing</h2>
+            <div class="auth-container">
+                <h2>Admin Login</h2>
+                <form id="adminLoginForm" autocomplete="off">
+                    <div class="form-group">
+                        <label for="adminEmail" class="required">Admin Email</label>
+                        <div class="input-group">
+                            <input type="email" id="adminEmail" required autocomplete="off" value="" placeholder="Enter your admin email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="adminPassword" class="required">Password</label>
+                        <div class="input-group">
+                            <input type="password" id="adminPassword" required autocomplete="off" value="" placeholder="Enter your password">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">
+                        Login as Admin
+                    </button>
+                    <p style="text-align: center; margin-top: 1rem;">
+                        <a href="index.html">Back to User Login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

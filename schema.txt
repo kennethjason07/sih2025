@@ -1,0 +1,54 @@
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.announcements (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  title character varying NOT NULL,
+  content text NOT NULL,
+  created_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT announcements_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.resources (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  title character varying NOT NULL,
+  link character varying NOT NULL,
+  created_at timestamp without time zone DEFAULT now(),
+  CONSTRAINT resources_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.team_members (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  team_id uuid NOT NULL,
+  position USER-DEFINED NOT NULL,
+  full_name text NOT NULL,
+  gender USER-DEFINED NOT NULL,
+  stream text NOT NULL,
+  semester USER-DEFINED NOT NULL,
+  category USER-DEFINED NOT NULL,
+  email text NOT NULL,
+  mobile text NOT NULL,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT team_members_pkey PRIMARY KEY (id),
+  CONSTRAINT team_members_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.teams(id)
+);
+CREATE TABLE public.teams (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  team_name character varying NOT NULL UNIQUE,
+  leader_name character varying NOT NULL,
+  leader_id uuid,
+  stream character varying NOT NULL,
+  semester character varying NOT NULL,
+  category character varying NOT NULL,
+  members jsonb,
+  created_at timestamp without time zone DEFAULT now(),
+  project_type character varying,
+  CONSTRAINT teams_pkey PRIMARY KEY (id),
+  CONSTRAINT teams_leader_id_fkey FOREIGN KEY (leader_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.users (
+  id uuid NOT NULL,
+  email text NOT NULL UNIQUE,
+  role USER-DEFINED DEFAULT 'leader'::user_role,
+  created_at timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  CONSTRAINT users_pkey PRIMARY KEY (id),
+  CONSTRAINT users_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id)
+);

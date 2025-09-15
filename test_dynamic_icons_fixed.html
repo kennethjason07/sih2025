@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dynamic Icons - Fixed</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome removed as per user request -->
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-gradient slide-in-down">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="header-logo">
+                <div class="header-text">
+                    <h1 class="fade-in">SIH 2025 Dynamic Icons Test - Fixed</h1>
+                    <p class="fade-in">Testing fixed dynamic behavior of input fields</p>
+                    <p class="made-by">Made by Maximus Consultancy Services</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <h1>Test Dynamic Icons - Fixed Version</h1>
+        
+        <div class="form-group">
+            <label for="teamName">Team Name</label>
+            <div class="input-group">
+                <input type="text" id="teamName" placeholder="Enter your team name">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="leaderName">Leader Name</label>
+            <div class="input-group">
+                <input type="text" id="leaderName" placeholder="Enter leader's full name">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="leaderStream">Leader Stream</label>
+            <div class="input-group">
+                <input type="text" id="leaderStream" placeholder="e.g., CSE, ECE, ME">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="leaderEmail">Leader Email</label>
+            <div class="input-group">
+                <input type="email" id="leaderEmail" placeholder="leader@example.com">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="leaderMobile">Leader Mobile</label>
+            <div class="input-group">
+                <input type="tel" id="leaderMobile" placeholder="Enter mobile number">
+            </div>
+        </div>
+        
+        <h2>Member Fields</h2>
+        <div class="form-group">
+            <label>Member Name</label>
+            <div class="input-group">
+                <input type="text" class="member-name" placeholder="Member Name">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Member Stream</label>
+            <div class="input-group">
+                <input type="text" class="member-stream" placeholder="Stream">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Member Email</label>
+            <div class="input-group">
+                <input type="email" class="member-email" placeholder="Member Email">
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label>Member Mobile</label>
+            <div class="input-group">
+                <input type="tel" class="member-mobile" placeholder="Member Mobile">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to add dynamic behavior
+            function addDynamicBehavior() {
+                // Get all input fields
+                const inputs = document.querySelectorAll('input');
+                
+                inputs.forEach(input => {
+                    // Handle input event
+                    input.addEventListener('input', function() {
+                        if (this.value.length > 0) {
+                            // Remove placeholder
+                            this.removeAttribute('placeholder');
+                        } else {
+                            // Restore placeholder based on class or ID
+                            if (this.id === 'teamName') {
+                                this.setAttribute('placeholder', 'Enter your team name');
+                            } else if (this.id === 'leaderName') {
+                                this.setAttribute('placeholder', 'Enter leader\'s full name');
+                            } else if (this.id === 'leaderStream') {
+                                this.setAttribute('placeholder', 'e.g., CSE, ECE, ME');
+                            } else if (this.id === 'leaderEmail') {
+                                this.setAttribute('placeholder', 'leader@example.com');
+                            } else if (this.id === 'leaderMobile') {
+                                this.setAttribute('placeholder', 'Enter mobile number');
+                            } else if (this.classList.contains('member-name')) {
+                                this.setAttribute('placeholder', 'Member Name');
+                            } else if (this.classList.contains('member-stream')) {
+                                this.setAttribute('placeholder', 'Stream');
+                            } else if (this.classList.contains('member-email')) {
+                                this.setAttribute('placeholder', 'Member Email');
+                            } else if (this.classList.contains('member-mobile')) {
+                                this.setAttribute('placeholder', 'Member Mobile');
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Initialize the dynamic behavior
+            addDynamicBehavior();
+        });
+    </script>
+</body>
+</html>

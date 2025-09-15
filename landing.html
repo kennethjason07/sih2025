@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIH 2025 Leader Onboarding</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Add favicon -->
+    <link rel="icon" type="image/x-icon" href="logo/logo.ico">
+    <!-- Font Awesome removed as per user request -->
+</head>
+<body>
+    <header class="header-gradient slide-in-down">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="header-logo">
+                <div class="header-text">
+                    <h1 class="fade-in rainbow-text">SIH 2025 Leader Onboarding Portal</h1>
+                    <p class="fade-in">Register and manage your SIH 2025 team with our modern platform</p>
+                    <p class="made-by">Made by Maximus Consultancy Services</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card scale-in float-animation">
+            <div class="card-header">
+                <h2 class="fade-in"><i class="fas fa-info-circle"></i> About This Portal</h2>
+            </div>
+            <p class="fade-in">This portal allows SIH 2025 leaders to register their teams and manage their participation in the event.</p>
+            
+            <h3 class="fade-in"><i class="fas fa-star"></i> Features</h3>
+            <ul class="staggered-animation">
+                <li class="fade-in"><i class="fas fa-shield-alt"></i> Secure authentication with email verification</li>
+                <li class="fade-in"><i class="fas fa-users"></i> Team registration with member details</li>
+                <li class="fade-in"><i class="fas fa-bullhorn"></i> Dashboard to view announcements and resources</li>
+                <li class="fade-in"><i class="fas fa-cogs"></i> Admin panel for managing teams, announcements, and resources</li>
+            </ul>
+            
+            <h3 class="fade-in"><i class="fas fa-rocket"></i> Getting Started</h3>
+            <p class="fade-in">To get started, simply sign up for an account using the link below. After verifying your email, you'll be able to register your team.</p>
+            
+            <div style="text-align: center; margin: 20px 0;" class="fade-in">
+                <a href="index.html" class="btn interactive-element pulse-animation btn-enhanced" style="display: inline-block; width: auto; padding: 1rem 2rem;">
+                    <i class="fas fa-sign-in-alt"></i> Login / Sign Up
+                </a>
+            </div>
+        </div>
+
+        <div class="card scale-in float-animation">
+            <div class="card-header">
+                <h2 class="fade-in"><i class="fas fa-user-tag"></i> User Roles</h2>
+            </div>
+            
+            <h3 class="fade-in"><i class="fas fa-user"></i> Leader</h3>
+            <ul class="staggered-animation">
+                <li class="fade-in"><i class="fas fa-user-plus"></i> Signs up with email + password</li>
+                <li class="fade-in"><i class="fas fa-edit"></i> Registers team details</li>
+                <li class="fade-in"><i class="fas fa-eye"></i> Views announcements and resources</li>
+                <li class="fade-in"><i class="fas fa-pen"></i> Edits team information</li>
+            </ul>
+            
+            <h3 class="fade-in"><i class="fas fa-user-shield"></i> Admin</h3>
+            <ul class="staggered-animation">
+                <li class="fade-in"><i class="fas fa-bullhorn"></i> Manages announcements and resources</li>
+                <li class="fade-in"><i class="fas fa-users"></i> Views all registered teams</li>
+                <li class="fade-in"><i class="fas fa-trash"></i> Creates and deletes content</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer style="background-color: #0f172a; color: white; padding: 2rem 0; margin-top: 3rem;" class="slide-in-up">
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; align-items: center;">
+                <p style="margin: 0;" class="fade-in">&copy; 2025 SIH 2025 Portal. All rights reserved.</p>
+                <p class="made-by" style="margin: 0; font-size: 0.85rem; opacity: 0.8;">Made by Maximus Consultancy Services</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Add scroll animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.staggered-animation, .fade-in, .scale-in, .slide-in-down, .slide-in-up, .float-animation');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            elements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

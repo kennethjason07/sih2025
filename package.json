@@ -1,0 +1,21 @@
+{
+  "name": "sih2025-hackathon-leader-onboarding",
+  "version": "1.0.0",
+  "description": "Hackathon Leader Onboarding Web App for SIH 2025",
+  "scripts": {
+    "build": "echo 'Building static site' && exit 0",
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "hackathon",
+    "sih",
+    "leader",
+    "onboarding",
+    "supabase"
+  ],
+  "author": "SIH 2025 Team",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}

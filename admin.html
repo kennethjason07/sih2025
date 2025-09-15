@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SIH 2025 Leader Onboarding</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Add favicon -->
+    <link rel="icon" type="image/x-icon" href="logo/logo.ico">
+    <!-- Font Awesome removed as per user request -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="dashboard fade-in">
+        <div class="sidebar slide-in-left">
+            <div class="sidebar-header">
+                <div class="logo-container">
+                    <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="sidebar-logo">
+                </div>
+                <h2 class="fade-in">Admin Panel</h2>
+                <p class="made-by-sidebar">Made by Maximus Consultancy Services</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" data-view="dashboard" id="dashboardLink" class="fade-in">
+                    Dashboard
+                </a>
+                <a href="#" data-view="announcements" class="active fade-in">
+                    Announcements
+                </a>
+                <a href="#" data-view="resources" class="fade-in">
+                    Resources
+                </a>
+                <a href="#" data-view="teams" class="fade-in">
+                    Teams
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <button id="logoutBtn" class="btn btn-danger pulse-animation">
+                    Logout
+                </button>
+            </div>
+        </div>
+        <div class="main-content slide-in-right">
+            <div class="dashboard-header">
+                <h1 class="fade-in">Admin Dashboard</h1>
+                <div class="user-info">
+                    <p class="fade-in">Admin: <span id="userEmail"></span></p>
+                </div>
+            </div>
+
+            <div class="admin-content">
+                <!-- Statistics Section -->
+                <div class="card scale-in">
+                    <div class="card-header">
+                        <h3 class="fade-in">Statistics</h3>
+                    </div>
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <h4 id="totalTeams" class="pulse-animation">0</h4>
+                            <p>Total Teams Registered</p>
+                        </div>
+                        <div class="stat-item">
+                            <h4 id="totalMembers" class="pulse-animation">0</h4>
+                            <p>Total Members Registered</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card scale-in">
+                    <div class="card-header">
+                        <h3 class="fade-in">Manage Announcements</h3>
+                    </div>
+                    <form id="announcementForm">
+                        <div class="form-group">
+                            <label for="announcementTitle" class="required fade-in">Title</label>
+                            <div class="input-group">
+                                <input type="text" id="announcementTitle" required placeholder="Enter announcement title" class="fade-in">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="announcementContent" class="required fade-in">Content</label>
+                            <textarea id="announcementContent" rows="4" required placeholder="Enter announcement content" class="fade-in"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-success pulse-animation">
+                            Add Announcement
+                        </button>
+                    </form>
+                    
+                    <div id="announcementsList" class="admin-list">
+                        <h4 class="fade-in">Existing Announcements</h4>
+                        <p class="fade-in">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="card scale-in">
+                    <div class="card-header">
+                        <h3 class="fade-in">Manage Resources</h3>
+                    </div>
+                    <form id="resourceForm">
+                        <div class="form-group">
+                            <label for="resourceTitle" class="required fade-in">Title</label>
+                            <div class="input-group">
+                                <input type="text" id="resourceTitle" required placeholder="Enter resource title" class="fade-in">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="resourceLink" class="fade-in">Link (Optional)</label>
+                            <div class="input-group">
+                                <input type="url" id="resourceLink" placeholder="https://example.com/resource" class="fade-in">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="resourceFile" class="fade-in">Upload File (Optional)</label>
+                            <input type="file" id="resourceFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.gif,.zip,.rar" class="fade-in">
+                            <small class="fade-in">Supported formats: PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, JPG, PNG, GIF, ZIP, RAR</small>
+                        </div>
+                        <button type="submit" class="btn btn-success pulse-animation">
+                            Add Resource
+                        </button>
+                    </form>
+                    
+                    <div id="resourcesList" class="admin-list">
+                        <h4 class="fade-in">Existing Resources</h4>
+                        <p class="fade-in">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/admin.js"></script>
+</body>
+</html>

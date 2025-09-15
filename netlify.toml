@@ -1,0 +1,16 @@
+[build]
+  publish = "/"
+  command = "echo 'No build command needed for static site'"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[dev]
+  command = "echo 'No dev server command needed'"
+
+# Set environment variables for Supabase
+[template.environment]
+  SUPABASE_URL = "Your Supabase URL"
+  SUPABASE_ANON_KEY = "Your Supabase Anonymous Key"

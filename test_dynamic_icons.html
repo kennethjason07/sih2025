@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Icon Test</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome removed as per user request -->
+    <style>
+        body {
+            padding: 2rem;
+            background-color: #f1f5f9;
+        }
+        .test-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .explanation {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-gradient slide-in-down">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="header-logo">
+                <div class="header-text">
+                    <h1 class="fade-in">SIH 2025 Dynamic Icons Test</h1>
+                    <p class="fade-in">Testing dynamic behavior of input fields</p>
+                    <p class="made-by">Made by Maximus Consultancy Services</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="test-container">
+        <div class="explanation">
+            <h2>Dynamic Icon and Placeholder Test</h2>
+            <p>This page demonstrates the dynamic behavior where icons and placeholders disappear when you type in the input fields and reappear when the fields are empty.</p>
+        </div>
+        
+        <div class="card scale-in">
+            <div class="card-header">
+                <h2>Dynamic Input Fields</h2>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="testName">Name</label>
+                    <div class="input-group">
+                        <input type="text" id="testName" placeholder="Enter your name">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="testEmail">Email</label>
+                    <div class="input-group">
+                        <input type="email" id="testEmail" placeholder="Enter your email">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="testPassword">Password</label>
+                    <div class="input-group">
+                        <input type="password" id="testPassword" placeholder="Enter your password">
+                    </div>
+                </div>
+                
+                <button type="button" class="btn btn-enhanced">Test Button</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners to all input fields
+            const inputs = document.querySelectorAll('input');
+            
+            inputs.forEach(input => {
+                // Handle input event
+                input.addEventListener('input', function() {
+                    if (this.value.length > 0) {
+                        this.removeAttribute('placeholder');
+                    } else {
+                        // Restore original placeholder based on input type
+                        if (this.type === 'email') {
+                            this.setAttribute('placeholder', 'Enter your email');
+                        } else if (this.type === 'password') {
+                            this.setAttribute('placeholder', 'Enter your password');
+                        } else {
+                            this.setAttribute('placeholder', 'Enter your name');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

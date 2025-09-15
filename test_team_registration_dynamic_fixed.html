@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Registration - Dynamic Icons Test</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome removed as per user request -->
+</head>
+<body>
+    <header class="header-gradient slide-in-down">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="header-logo">
+                <div class="header-text">
+                    <h1 class="fade-in">SIH 2025 Team Registration</h1>
+                    <p class="fade-in">Register your team for Smart India Hackathon 2025</p>
+                    <p class="made-by">Made by Maximus Consultancy Services</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card scale-in">
+            <div class="card-header">
+                <h2 class="fade-in">Team Registration</h2>
+                <p class="fade-in">Please fill in your team details below</p>
+            </div>
+            <form id="teamRegistrationForm" class="team-form">
+                <div class="form-group">
+                    <label for="projectType" class="required fade-in">Project Type</label>
+                    <select id="projectType" required class="fade-in">
+                        <option value="">Select Project Type</option>
+                        <option value="Software">Software</option>
+                        <option value="Hardware">Hardware</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="teamName" class="required fade-in">Team Name (Unique)</label>
+                    <div class="input-group">
+                        <input type="text" id="teamName" required placeholder="Enter your team name" class="fade-in">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="academicYear" class="required fade-in">Academic Year</label>
+                    <select id="academicYear" required class="fade-in">
+                        <option value="">Select Academic Year</option>
+                        <option value="2024-25" selected>2024-25</option>
+                    </select>
+                </div>
+                
+                <!-- Leader Details -->
+                <div class="card scale-in">
+                    <div class="card-header">
+                        <h3 class="fade-in">Leader Details</h3>
+                    </div>
+                    <div class="form-group">
+                        <label for="leaderName" class="required fade-in">Full Name</label>
+                        <div class="input-group">
+                            <input type="text" id="leaderName" required placeholder="Enter leader's full name" class="fade-in">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="leaderGender" class="required fade-in">Gender</label>
+                            <select id="leaderGender" required class="fade-in">
+                                <option value="">Select Gender</option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="leaderStream" class="required fade-in">Stream</label>
+                            <div class="input-group">
+                                <input type="text" id="leaderStream" required placeholder="e.g., CSE, ECE, ME" class="fade-in">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="leaderSemester" class="required fade-in">Semester</label>
+                            <select id="leaderSemester" required class="fade-in">
+                                <option value="">Select Semester</option>
+                                <option value="1st">1st</option>
+                                <option value="2nd">2nd</option>
+                                <option value="3rd">3rd</option>
+                                <option value="4th">4th</option>
+                                <option value="5th">5th</option>
+                                <option value="6th">6th</option>
+                                <option value="7th">7th</option>
+                                <option value="8th">8th</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="leaderCategory" class="required fade-in">Category</label>
+                            <select id="leaderCategory" required class="fade-in">
+                                <option value="">Select Category</option>
+                                <option value="GM">GM</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                                <option value="OBC">OBC</option>
+                                <option value="OTHER">OTHER</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="leaderEmail" class="required fade-in">Email ID</label>
+                        <div class="input-group">
+                            <input type="email" id="leaderEmail" required placeholder="leader@example.com" class="fade-in">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="leaderMobile" class="required fade-in">Mobile No.</label>
+                        <div class="input-group">
+                            <input type="tel" id="leaderMobile" required placeholder="Enter mobile number" class="fade-in">
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="leaderPosition" value="Leader">
+                </div>
+                
+                <!-- Team Members -->
+                <div class="card scale-in">
+                    <div class="card-header">
+                        <h3 class="fade-in">Team Members</h3>
+                    </div>
+                    <div id="membersContainer">
+                        <div class="member-row">
+                            <div class="form-group">
+                                <label class="fade-in">Member 1 Full Name</label>
+                                <div class="input-group">
+                                    <input type="text" placeholder="Member Name" class="member-name fade-in" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="fade-in">Gender</label>
+                                    <select class="member-gender fade-in" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="M">Male</option>
+                                        <option value="F">Female</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="fade-in">Stream</label>
+                                    <div class="input-group">
+                                        <input type="text" placeholder="Stream" class="member-stream fade-in" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="fade-in">Semester</label>
+                                    <select class="member-semester fade-in" required>
+                                        <option value="">Select Semester</option>
+                                        <option value="1st">1st</option>
+                                        <option value="2nd">2nd</option>
+                                        <option value="3rd">3rd</option>
+                                        <option value="4th">4th</option>
+                                        <option value="5th">5th</option>
+                                        <option value="6th">6th</option>
+                                        <option value="7th">7th</option>
+                                        <option value="8th">8th</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="fade-in">Category</label>
+                                    <select class="member-category fade-in" required>
+                                        <option value="">Select Category</option>
+                                        <option value="GM">GM</option>
+                                        <option value="SC">SC</option>
+                                        <option value="ST">ST</option>
+                                        <option value="OBC">OBC</option>
+                                        <option value="OTHER">OTHER</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="fade-in">Email ID</label>
+                                <div class="input-group">
+                                    <input type="email" placeholder="Member Email" class="member-email fade-in" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="fade-in">Mobile No.</label>
+                                <div class="input-group">
+                                    <input type="tel" placeholder="Member Mobile" class="member-mobile fade-in" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="button" id="addMemberBtn" class="btn btn-secondary btn-small fade-in">
+                        Add Another Member
+                    </button>
+                </div>
+                
+                <button type="submit" id="saveTeamBtn" class="btn btn-success pulse-animation btn-enhanced">
+                    Save Team Details
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Function to add dynamic behavior
+        function addDynamicBehavior() {
+            // Add event listeners to all input fields
+            const inputs = document.querySelectorAll('input');
+            
+            inputs.forEach(input => {
+                // Check if we haven't already added a listener to this input
+                if (!input.dataset.dynamicListenerAdded) {
+                    // Handle input event
+                    input.addEventListener('input', function() {
+                        if (this.value.length > 0) {
+                            // Remove placeholder
+                            this.removeAttribute('placeholder');
+                        } else {
+                            // Restore original placeholder based on input field
+                            if (this.id === 'teamName') {
+                                this.setAttribute('placeholder', 'Enter your team name');
+                            } else if (this.id === 'leaderName') {
+                                this.setAttribute('placeholder', 'Enter leader\'s full name');
+                            } else if (this.id === 'leaderStream') {
+                                this.setAttribute('placeholder', 'e.g., CSE, ECE, ME');
+                            } else if (this.id === 'leaderEmail') {
+                                this.setAttribute('placeholder', 'leader@example.com');
+                            } else if (this.id === 'leaderMobile') {
+                                this.setAttribute('placeholder', 'Enter mobile number');
+                            } else if (this.classList.contains('member-name')) {
+                                this.setAttribute('placeholder', 'Member Name');
+                            } else if (this.classList.contains('member-stream')) {
+                                this.setAttribute('placeholder', 'Stream');
+                            } else if (this.classList.contains('member-email')) {
+                                this.setAttribute('placeholder', 'Member Email');
+                            } else if (this.classList.contains('member-mobile')) {
+                                this.setAttribute('placeholder', 'Member Mobile');
+                            }
+                        }
+                    });
+                    
+                    // Mark this input as having a listener to avoid duplicate listeners
+                    input.dataset.dynamicListenerAdded = 'true';
+                }
+            });
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add dynamic behavior to existing inputs
+            addDynamicBehavior();
+            
+            // Add member button functionality
+            document.getElementById('addMemberBtn').addEventListener('click', function() {
+                const container = document.getElementById('membersContainer');
+                const memberCount = container.querySelectorAll('.member-row').length + 1;
+                const memberRow = document.createElement('div');
+                memberRow.className = 'member-row';
+                memberRow.innerHTML = `
+                    <div class="form-group">
+                        <label>Member ${memberCount} Full Name</label>
+                        <div class="input-group">
+                            <input type="text" placeholder="Member Name" class="member-name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <select class="member-gender">
+                                <option value="">Select Gender</option>
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Stream</label>
+                            <div class="input-group">
+                                <input type="text" placeholder="Stream" class="member-stream">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Semester</label>
+                            <select class="member-semester">
+                                <option value="">Select Semester</option>
+                                <option value="1st">1st</option>
+                                <option value="2nd">2nd</option>
+                                <option value="3rd">3rd</option>
+                                <option value="4th">4th</option>
+                                <option value="5th">5th</option>
+                                <option value="6th">6th</option>
+                                <option value="7th">7th</option>
+                                <option value="8th">8th</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select class="member-category">
+                                <option value="">Select Category</option>
+                                <option value="GM">GM</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                                <option value="OBC">OBC</option>
+                                <option value="OTHER">OTHER</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email ID</label>
+                        <div class="input-group">
+                            <input type="email" placeholder="Member Email" class="member-email">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Mobile No.</label>
+                        <div class="input-group">
+                            <input type="tel" placeholder="Member Mobile" class="member-mobile">
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" class="member-position" value="Member">
+                `;
+                container.appendChild(memberRow);
+                
+                // Add dynamic behavior to new inputs
+                setTimeout(() => {
+                    addDynamicBehavior();
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
