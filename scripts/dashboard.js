@@ -56,9 +56,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             loadView(view);
         });
     });
-    
+
     logoutBtn.addEventListener('click', handleLogout);
-    
+
+    // Add focus/blur events for enhanced styling
+    function addFocusListeners() {
+        const inputs = document.querySelectorAll('.input-group input, .input-group select');
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.closest('.input-group').classList.add('focus');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.closest('.input-group').classList.remove('focus');
+            });
+        });
+    }
+
     // Load default view
     loadView('team');
 });
@@ -81,6 +95,14 @@ async function loadView(view) {
                                 <option value="Software">Software</option>
                                 <option value="Hardware">Hardware</option>
                             </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sihPsId" class="required">Problem Statement ID</label>
+                            <div class="input-group">
+                                <i class="fas fa-hashtag"></i>
+                                <input type="number" id="sihPsId" required placeholder="Enter Problem Statement ID">
+                            </div>
                         </div>
                         
                         <div class="form-group">
@@ -118,7 +140,18 @@ async function loadView(view) {
                                     <label for="leaderStream" class="required">Stream</label>
                                     <div class="input-group">
                                         <i class="fas fa-graduation-cap"></i>
-                                        <input type="text" id="leaderStream" required placeholder="e.g., CSE, ECE, ME">
+                                        <select id="leaderStream" required>
+                                            <option value="">Select Stream</option>
+                                            <option value="CSE">CSE</option>
+                                            <option value="ISE">ISE</option>
+                                            <option value="AIML">AIML</option>
+                                            <option value="CSE-DS">CSE-DS</option>
+                                            <option value="ECE">ECE</option>
+                                            <option value="EEE">EEE</option>
+                                            <option value="CSE-AIML">CSE-AIML</option>
+                                            <option value="CIVIL">CIVIL</option>
+                                            <option value="ICB">ICB</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -200,7 +233,18 @@ async function loadView(view) {
                                             <label>Stream</label>
                                             <div class="input-group">
                                                 <i class="fas fa-graduation-cap"></i>
-                                                <input type="text" placeholder="Stream" class="member-stream" required>
+                                                <select class="member-stream" required>
+                                                    <option value="">Select Stream</option>
+                                                    <option value="CSE">CSE</option>
+                                                    <option value="ISE">ISE</option>
+                                                    <option value="AIML">AIML</option>
+                                                    <option value="CSE-DS">CSE-DS</option>
+                                                    <option value="ECE">ECE</option>
+                                                    <option value="EEE">EEE</option>
+                                                    <option value="CSE-AIML">CSE-AIML</option>
+                                                    <option value="CIVIL">CIVIL</option>
+                                                    <option value="ICB">ICB</option>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -277,6 +321,12 @@ async function loadView(view) {
             document.getElementById('teamForm').addEventListener('submit', handleTeamRegistration);
             document.getElementById('addMember').addEventListener('click', addMemberRow);
             
+            // Add focus listeners for enhanced styling
+            setTimeout(addFocusListeners, 100);
+            
+            // Add real-time validation
+            setTimeout(addRealTimeValidation, 150);
+            
             // Load existing team data if available
             loadExistingTeamData();
             break;
@@ -343,7 +393,18 @@ function addMemberRow() {
                 <label>Stream</label>
                 <div class="input-group">
                     <i class="fas fa-graduation-cap"></i>
-                    <input type="text" placeholder="Stream" class="member-stream" required>
+                    <select class="member-stream" required>
+                        <option value="">Select Stream</option>
+                        <option value="CSE">CSE</option>
+                        <option value="ISE">ISE</option>
+                        <option value="AIML">AIML</option>
+                        <option value="CSE-DS">CSE-DS</option>
+                        <option value="ECE">ECE</option>
+                        <option value="EEE">EEE</option>
+                        <option value="CSE-AIML">CSE-AIML</option>
+                        <option value="CIVIL">CIVIL</option>
+                        <option value="ICB">ICB</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -405,6 +466,18 @@ function addMemberRow() {
     memberRow.querySelector('.remove-member').addEventListener('click', function() {
         container.removeChild(memberRow);
     });
+    
+    // Add focus/blur events for new inputs
+    const newInputs = memberRow.querySelectorAll('.input-group input, .input-group select');
+    newInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.closest('.input-group').classList.add('focus');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.closest('.input-group').classList.remove('focus');
+        });
+    });
 }
 
 async function loadExistingTeamData() {
@@ -438,6 +511,11 @@ async function loadExistingTeamData() {
         const projectTypeElement = document.getElementById('projectType');
         if (projectTypeElement) {
             projectTypeElement.value = teamData.project_type || '';
+        }
+        
+        const sihPsIdElement = document.getElementById('sihPsId');
+        if (sihPsIdElement) {
+            sihPsIdElement.value = teamData.sih_ps_id || '';
         }
         
         // Fetch team members
@@ -573,10 +651,24 @@ async function testDataLoading() {
 async function handleTeamRegistration(e) {
     e.preventDefault();
     
+    // Perform validation
+    const teamSizeValidation = validateTeamSize();
+    if (!teamSizeValidation.valid) {
+        showModal(teamSizeValidation.message);
+        return;
+    }
+    
+    const genderValidation = validateGenderRequirement();
+    if (!genderValidation.valid) {
+        showModal(genderValidation.message);
+        return;
+    }
+    
     // Get form data
     const projectType = document.getElementById('projectType').value;
     const teamName = document.getElementById('teamName').value;
     const academicYear = document.getElementById('academicYear').value;
+    const sihPsId = document.getElementById('sihPsId').value; // Get Problem Statement ID
     
     // Get leader details
     const leaderDetails = {
@@ -643,6 +735,7 @@ async function handleTeamRegistration(e) {
                 .update({
                     team_name: teamName,
                     project_type: projectType,
+                    sih_ps_id: sihPsId, // Add Problem Statement ID
                     leader_name: leaderDetails.name,
                     stream: leaderDetails.stream,
                     semester: leaderDetails.semester,
@@ -698,6 +791,7 @@ async function handleTeamRegistration(e) {
                 .insert({
                     team_name: teamName,
                     project_type: projectType,
+                    sih_ps_id: sihPsId, // Add Problem Statement ID
                     leader_name: leaderDetails.name,
                     leader_id: currentUser.id,
                     stream: leaderDetails.stream,
@@ -932,4 +1026,185 @@ async function createMissingUserRoleRecord(userId) {
     } catch (error) {
         console.error('Error in createMissingUserRoleRecord:', error);
     }
+}
+
+// Add modal HTML to the page
+function createModal() {
+    // Check if modal already exists
+    if (document.getElementById('validationModal')) return;
+    
+    const modalHTML = `
+        <div id="validationModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Validation Error</h3>
+                </div>
+                <div class="modal-body">
+                    <p id="modalMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="closeModal" class="btn-close">OK</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Add event listener to close button
+    document.getElementById('closeModal').addEventListener('click', () => {
+        document.getElementById('validationModal').classList.remove('show');
+    });
+    
+    // Close modal when clicking outside
+    document.getElementById('validationModal').addEventListener('click', (e) => {
+        if (e.target.id === 'validationModal') {
+            document.getElementById('validationModal').classList.remove('show');
+        }
+    });
+}
+
+// Show modal with message
+function showModal(message) {
+    createModal();
+    document.getElementById('modalMessage').textContent = message;
+    document.getElementById('validationModal').classList.add('show');
+}
+
+// Validate team size (6 members including leader)
+function validateTeamSize() {
+    const memberRows = document.querySelectorAll('.member-row');
+    const totalMembers = memberRows.length + 1; // +1 for leader
+    
+    if (totalMembers !== 6) {
+        return {
+            valid: false,
+            message: `Team must have exactly 6 members (including the leader). Currently you have ${totalMembers} member(s).`
+        };
+    }
+    
+    return { valid: true };
+}
+
+// Validate gender requirement (at least one female in the entire team)
+function validateGenderRequirement() {
+    // Check leader gender
+    const leaderGender = document.getElementById('leaderGender').value;
+    
+    // Check member genders
+    const memberGenders = document.querySelectorAll('.member-gender');
+    let hasFemale = leaderGender === 'F';
+    
+    if (!hasFemale) {
+        for (let i = 0; i < memberGenders.length; i++) {
+            if (memberGenders[i].value === 'F') {
+                hasFemale = true;
+                break;
+            }
+        }
+    }
+    
+    if (!hasFemale) {
+        return {
+            valid: false,
+            message: 'Team must include at least one female member (including the leader).'
+        };
+    }
+    
+    return { valid: true };
+}
+
+// Real-time validation for team size
+function updateTeamSizeIndicator() {
+    const memberRows = document.querySelectorAll('.member-row');
+    const totalMembers = memberRows.length + 1; // +1 for leader
+    
+    // Update add member button state
+    const addMemberBtn = document.getElementById('addMember');
+    if (totalMembers >= 6) {
+        addMemberBtn.disabled = true;
+        addMemberBtn.innerHTML = '<i class="fas fa-users"></i> Maximum 6 Members Reached';
+    } else {
+        addMemberBtn.disabled = false;
+        addMemberBtn.innerHTML = '<i class="fas fa-plus"></i> Add Another Member';
+    }
+    
+    // Show warning if less than 6 members
+    const warningElement = document.getElementById('teamSizeWarning');
+    if (totalMembers < 6) {
+        if (!warningElement) {
+            const warning = document.createElement('div');
+            warning.id = 'teamSizeWarning';
+            warning.className = 'notification warning';
+            warning.innerHTML = '<i class="fas fa-exclamation-circle"></i> Team must have exactly 6 members (including leader). Currently: ' + totalMembers;
+            document.querySelector('#teamForm .card-header').appendChild(warning);
+        } else {
+            warningElement.innerHTML = '<i class="fas fa-exclamation-circle"></i> Team must have exactly 6 members (including leader). Currently: ' + totalMembers;
+        }
+    } else if (warningElement) {
+        warningElement.remove();
+    }
+}
+
+// Real-time validation for gender requirement
+function updateGenderIndicator() {
+    const leaderGender = document.getElementById('leaderGender').value;
+    const memberGenders = document.querySelectorAll('.member-gender');
+    
+    let hasFemale = leaderGender === 'F';
+    if (!hasFemale) {
+        for (let i = 0; i < memberGenders.length; i++) {
+            if (memberGenders[i].value === 'F') {
+                hasFemale = true;
+                break;
+            }
+        }
+    }
+    
+    // Show warning if no female member
+    const warningElement = document.getElementById('genderWarning');
+    if (!hasFemale) {
+        if (!warningElement) {
+            const warning = document.createElement('div');
+            warning.id = 'genderWarning';
+            warning.className = 'notification warning';
+            warning.innerHTML = '<i class="fas fa-exclamation-circle"></i> Team must include at least one female member (including the leader).';
+            document.querySelector('#teamForm .card-header').appendChild(warning);
+        }
+    } else if (warningElement) {
+        warningElement.remove();
+    }
+}
+
+// Add event listeners for real-time validation
+function addRealTimeValidation() {
+    // Team size validation
+    document.getElementById('addMember').addEventListener('click', updateTeamSizeIndicator);
+    
+    // Gender validation
+    document.getElementById('leaderGender').addEventListener('change', updateGenderIndicator);
+    
+    // Add gender change listeners to member rows
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('#addMember')) {
+            // When a new member is added, update gender listeners
+            setTimeout(() => {
+                const newMemberGenders = document.querySelectorAll('.member-gender');
+                newMemberGenders.forEach(select => {
+                    select.addEventListener('change', updateGenderIndicator);
+                });
+                updateGenderIndicator();
+            }, 100);
+        }
+    });
+    
+    // Listen for changes in existing member genders
+    const memberGenders = document.querySelectorAll('.member-gender');
+    memberGenders.forEach(select => {
+        select.addEventListener('change', updateGenderIndicator);
+    });
+    
+    // Initial validation
+    updateTeamSizeIndicator();
+    updateGenderIndicator();
 }

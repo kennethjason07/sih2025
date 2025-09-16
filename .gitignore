@@ -105,3 +105,5 @@ public/
 
 # Sensitive files
 credentials.txt
+# Local Netlify folder
+.netlify

@@ -10,26 +10,186 @@ const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const teamForm = document.getElementById('teamRegistrationForm');
 const addMemberBtn = document.getElementById('addMemberBtn');
 
-// Add event listeners
-document.addEventListener('DOMContentLoaded', async () => {
-    // Check if user is logged in
-    const { data: { user } } = await supabase.auth.getUser();
+// Add modal HTML to the page
+function createModal() {
+    // Check if modal already exists
+    if (document.getElementById('validationModal')) return;
     
-    if (!user) {
-        // Redirect to login if not authenticated
-        window.location.href = 'index.html';
-        return;
+    const modalHTML = `
+        <div id="validationModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Validation Error</h3>
+                </div>
+                <div class="modal-body">
+                    <p id="modalMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="closeModal" class="btn-close">OK</button>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    // Add event listener to close button
+    document.getElementById('closeModal').addEventListener('click', () => {
+        document.getElementById('validationModal').classList.remove('show');
+    });
+    
+    // Close modal when clicking outside
+    document.getElementById('validationModal').addEventListener('click', (e) => {
+        if (e.target.id === 'validationModal') {
+            document.getElementById('validationModal').classList.remove('show');
+        }
+    });
+}
+
+// Show modal with message
+function showModal(message) {
+    createModal();
+    document.getElementById('modalMessage').textContent = message;
+    document.getElementById('validationModal').classList.add('show');
+}
+
+// Validate team size (6 members including leader)
+function validateTeamSize() {
+    const memberRows = document.querySelectorAll('.member-row');
+    const totalMembers = memberRows.length + 1; // +1 for leader
+    
+    if (totalMembers !== 6) {
+        return {
+            valid: false,
+            message: `Team must have exactly 6 members (including the leader). Currently you have ${totalMembers} member(s).`
+        };
     }
     
-    // Pre-fill leader name with user's email
-    document.getElementById('leaderEmail').value = user.email;
+    return { valid: true };
+}
+
+// Validate gender requirement (at least one female in the entire team)
+function validateGenderRequirement() {
+    // Check leader gender
+    const leaderGender = document.getElementById('leaderGender').value;
     
-    // Add event listeners
-    teamForm.addEventListener('submit', handleTeamRegistration);
-    addMemberBtn.addEventListener('click', addMemberField);
+    // Check member genders
+    const memberGenders = document.querySelectorAll('.member-gender');
+    let hasFemale = leaderGender === 'F';
     
-    // Icon-related functionality removed as per user request
-});
+    if (!hasFemale) {
+        for (let i = 0; i < memberGenders.length; i++) {
+            if (memberGenders[i].value === 'F') {
+                hasFemale = true;
+                break;
+            }
+        }
+    }
+    
+    if (!hasFemale) {
+        return {
+            valid: false,
+            message: 'Team must include at least one female member (including the leader).'
+        };
+    }
+    
+    return { valid: true };
+}
+
+// Real-time validation for team size
+function updateTeamSizeIndicator() {
+    const memberRows = document.querySelectorAll('.member-row');
+    const totalMembers = memberRows.length + 1; // +1 for leader
+    
+    // Update add member button state
+    const addMemberBtn = document.getElementById('addMemberBtn');
+    if (totalMembers >= 6) {
+        addMemberBtn.disabled = true;
+        addMemberBtn.textContent = 'Maximum 6 Members Reached';
+    } else {
+        addMemberBtn.disabled = false;
+        addMemberBtn.textContent = 'Add Another Member';
+    }
+    
+    // Show warning if less than 6 members
+    const warningElement = document.getElementById('teamSizeWarning');
+    if (totalMembers < 6) {
+        if (!warningElement) {
+            const warning = document.createElement('div');
+            warning.id = 'teamSizeWarning';
+            warning.className = 'notification warning';
+            warning.innerHTML = '<i class="fas fa-exclamation-circle"></i> Team must have exactly 6 members (including leader). Currently: ' + totalMembers;
+            document.querySelector('.card-header').appendChild(warning);
+        } else {
+            warningElement.innerHTML = '<i class="fas fa-exclamation-circle"></i> Team must have exactly 6 members (including leader). Currently: ' + totalMembers;
+        }
+    } else if (warningElement) {
+        warningElement.remove();
+    }
+}
+
+// Real-time validation for gender requirement
+function updateGenderIndicator() {
+    const leaderGender = document.getElementById('leaderGender').value;
+    const memberGenders = document.querySelectorAll('.member-gender');
+    
+    let hasFemale = leaderGender === 'F';
+    if (!hasFemale) {
+        for (let i = 0; i < memberGenders.length; i++) {
+            if (memberGenders[i].value === 'F') {
+                hasFemale = true;
+                break;
+            }
+        }
+    }
+    
+    // Show warning if no female member
+    const warningElement = document.getElementById('genderWarning');
+    if (!hasFemale) {
+        if (!warningElement) {
+            const warning = document.createElement('div');
+            warning.id = 'genderWarning';
+            warning.className = 'notification warning';
+            warning.innerHTML = '<i class="fas fa-exclamation-circle"></i> Team must include at least one female member (including the leader).';
+            document.querySelector('.card-header').appendChild(warning);
+        }
+    } else if (warningElement) {
+        warningElement.remove();
+    }
+}
+
+// Add event listeners for real-time validation
+function addRealTimeValidation() {
+    // Team size validation
+    document.getElementById('addMemberBtn').addEventListener('click', updateTeamSizeIndicator);
+    
+    // Gender validation
+    document.getElementById('leaderGender').addEventListener('change', updateGenderIndicator);
+    
+    // Add gender change listeners to member rows
+    document.addEventListener('click', function(e) {
+        if (e.target.matches('#addMemberBtn')) {
+            // When a new member is added, update gender listeners
+            setTimeout(() => {
+                const newMemberGenders = document.querySelectorAll('.member-gender');
+                newMemberGenders.forEach(select => {
+                    select.addEventListener('change', updateGenderIndicator);
+                });
+                updateGenderIndicator();
+            }, 100);
+        }
+    });
+    
+    // Listen for changes in existing member genders
+    const memberGenders = document.querySelectorAll('.member-gender');
+    memberGenders.forEach(select => {
+        select.addEventListener('change', updateGenderIndicator);
+    });
+    
+    // Initial validation
+    updateTeamSizeIndicator();
+    updateGenderIndicator();
+}
 
 function addMemberField() {
     const container = document.getElementById('membersContainer');
@@ -40,14 +200,14 @@ function addMemberField() {
         <div class="form-group">
             <label>Member ${memberCount} Full Name</label>
             <div class="input-group">
-                <input type="text" placeholder="Member Name" class="member-name">
+                <input type="text" placeholder="Member Name" class="member-name fade-in" required>
             </div>
         </div>
         
         <div class="form-row">
             <div class="form-group">
                 <label>Gender</label>
-                <select class="member-gender">
+                <select class="member-gender fade-in" required>
                     <option value="">Select Gender</option>
                     <option value="M">Male</option>
                     <option value="F">Female</option>
@@ -57,7 +217,18 @@ function addMemberField() {
             <div class="form-group">
                 <label>Stream</label>
                 <div class="input-group">
-                    <input type="text" placeholder="Stream" class="member-stream">
+                    <select class="member-stream fade-in" required>
+                        <option value="">Select Stream</option>
+                        <option value="CSE">CSE</option>
+                        <option value="ISE">ISE</option>
+                        <option value="AIML">AIML</option>
+                        <option value="CSE-DS">CSE-DS</option>
+                        <option value="ECE">ECE</option>
+                        <option value="EEE">EEE</option>
+                        <option value="CSE-AIML">CSE-AIML</option>
+                        <option value="CIVIL">CIVIL</option>
+                        <option value="ICB">ICB</option>
+                    </select>
                 </div>
             </div>
         </div>
@@ -65,7 +236,7 @@ function addMemberField() {
         <div class="form-row">
             <div class="form-group">
                 <label>Semester</label>
-                <select class="member-semester">
+                <select class="member-semester fade-in" required>
                     <option value="">Select Semester</option>
                     <option value="1st">1st</option>
                     <option value="2nd">2nd</option>
@@ -80,7 +251,7 @@ function addMemberField() {
             
             <div class="form-group">
                 <label>Category</label>
-                <select class="member-category">
+                <select class="member-category fade-in" required>
                     <option value="">Select Category</option>
                     <option value="GM">GM</option>
                     <option value="SC">SC</option>
@@ -94,14 +265,14 @@ function addMemberField() {
         <div class="form-group">
             <label>Email ID</label>
             <div class="input-group">
-                <input type="email" placeholder="Member Email" class="member-email">
+                <input type="email" placeholder="Member Email" class="member-email fade-in" required>
             </div>
         </div>
         
         <div class="form-group">
             <label>Mobile No.</label>
             <div class="input-group">
-                <input type="tel" placeholder="Member Mobile" class="member-mobile">
+                <input type="tel" placeholder="Member Mobile" class="member-mobile fade-in" required>
             </div>
         </div>
         
@@ -115,15 +286,41 @@ function addMemberField() {
     memberRow.querySelector('.remove-member').addEventListener('click', function() {
         container.removeChild(memberRow);
     });
+    
+    // Add focus/blur events for new inputs
+    const newInputs = memberRow.querySelectorAll('.input-group input, .input-group select');
+    newInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.closest('.input-group').classList.add('focus');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.closest('.input-group').classList.remove('focus');
+        });
+    });
 }
 
 async function handleTeamRegistration(e) {
     e.preventDefault();
     
+    // Perform validation
+    const teamSizeValidation = validateTeamSize();
+    if (!teamSizeValidation.valid) {
+        showModal(teamSizeValidation.message);
+        return;
+    }
+    
+    const genderValidation = validateGenderRequirement();
+    if (!genderValidation.valid) {
+        showModal(genderValidation.message);
+        return;
+    }
+    
     // Get form data
     const projectType = document.getElementById('projectType').value;
     const teamName = document.getElementById('teamName').value;
     const academicYear = document.getElementById('academicYear').value;
+    const sihPsId = document.getElementById('sihPsId').value; // Get SIH PS ID
     
     // Get leader details
     const leaderDetails = {
@@ -177,13 +374,10 @@ async function handleTeamRegistration(e) {
             .from('teams')
             .insert({
                 team_name: teamName,
-                project_type: projectType,  // Add project_type
-                leader_name: leaderDetails.name,
-                leader_id: user.id,
-                stream: leaderDetails.stream,
-                semester: leaderDetails.semester,
-                category: leaderDetails.category
-                // Remove members field since we're storing in team_members table
+                project_type: projectType,
+                academic_year: academicYear,
+                sih_ps_id: sihPsId, // Add SIH PS ID
+                leader_id: user.id
             })
             .select()
             .single();

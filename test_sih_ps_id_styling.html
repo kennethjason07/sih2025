@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIH PS ID Styling Test - SIH 2025 Portal</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- Add Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Add favicon -->
+    <link rel="icon" type="image/x-icon" href="logo/logo.ico">
+</head>
+<body>
+    <header class="header-gradient slide-in-down">
+        <div class="container">
+            <div class="logo-container">
+                <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="header-logo">
+                <div class="header-text">
+                    <h1 class="fade-in">SIH PS ID Styling Test</h1>
+                    <p class="fade-in">Testing enhanced styling for the Problem Statement ID field</p>
+                    <p class="made-by">Made by Maximus Consultancy Services</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card scale-in">
+            <div class="card-header">
+                <h2 class="fade-in">SIH PS ID Field Styling</h2>
+            </div>
+            <p class="fade-in">This page demonstrates the enhanced styling for the Problem Statement ID field in the team registration form.</p>
+            
+            <div class="form-group">
+                <label for="sihPsId" class="required fade-in">Problem Statement ID</label>
+                <div class="input-group">
+                    <input type="number" id="sihPsId" required placeholder="Enter Problem Statement ID" class="fade-in">
+                </div>
+            </div>
+            
+            <p class="fade-in">The field now has the following enhanced styling characteristics:</p>
+            <ul class="fade-in">
+                <li>Distinct accent-colored left border for number inputs</li>
+                <li>Animated gradient indicator on the left side</li>
+                <li>Subtle hover and focus effects</li>
+                <li>Consistent styling with other form fields</li>
+                <li>Enhanced visual feedback for better user experience</li>
+            </ul>
+            
+            <div class="form-group">
+                <label for="teamName" class="required fade-in">Team Name (for comparison)</label>
+                <div class="input-group">
+                    <input type="text" id="teamName" required placeholder="Enter your team name" class="fade-in">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer slide-in-up">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-text">
+                    <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="footer-logo">
+                    <p class="made-by">Made by Maximus Consultancy Services</p>
+                    <p class="made-for-college">Made for Guru Nanak Dev Engineering College Bidar</p>
+                </div>
+                <div class="footer-developers">
+                    <h4>Developed by:</h4>
+                    <ul>
+                        <li>Kenneth Jason</li>
+                        <li>Arshad Patel</li>
+                        <li>Abhishek Patil</li>
+                        <li>Hanok Alure</li>
+                    </ul>
+                </div>
+                <div class="footer-copyright">
+                    <p>&copy; 2025 Maximus Consultancy Services. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Add focus/blur events for enhanced styling
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.input-group input, .input-group select');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.closest('.input-group').classList.add('focus');
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.closest('.input-group').classList.remove('focus');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

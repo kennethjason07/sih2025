@@ -40,6 +40,13 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="sihPsId" class="required fade-in">SIH PS ID</label>
+                    <div class="input-group">
+                        <input type="number" id="sihPsId" required placeholder="Enter SIH Problem Statement ID" class="fade-in">
+                    </div>
+                </div>
+                
+                <div class="form-group">
                     <label for="teamName" class="required fade-in">Team Name (Unique)</label>
                     <div class="input-group">
                         <input type="text" id="teamName" required placeholder="Enter your team name" class="fade-in">
@@ -237,6 +244,8 @@
                             // Restore original placeholder based on input field
                             if (this.id === 'teamName') {
                                 this.setAttribute('placeholder', 'Enter your team name');
+                            } else if (this.id === 'sihPsId') {
+                                this.setAttribute('placeholder', 'Enter SIH Problem Statement ID');
                             } else if (this.id === 'leaderName') {
                                 this.setAttribute('placeholder', 'Enter leader\'s full name');
                             } else if (this.id === 'leaderStream') {

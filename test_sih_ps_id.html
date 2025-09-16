@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - SIH 2025 Leader Onboarding</title>
+    <title>SIH PS ID Test - SIH 2025 Portal</title>
     <link rel="stylesheet" href="styles/main.css">
     <!-- Add Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Add favicon -->
     <link rel="icon" type="image/x-icon" href="logo/logo.ico">
-    <!-- Font Awesome removed as per user request -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <header class="header-gradient slide-in-down">
@@ -18,37 +16,35 @@
             <div class="logo-container">
                 <img src="logo/logo.png" alt="Maximus Consultancy Services Logo" class="header-logo">
                 <div class="header-text">
-                    <h1 class="fade-in">SIH 2025 Admin Login</h1>
-                    <p class="fade-in">Secure access to the administrator dashboard</p>
+                    <h1 class="fade-in">SIH PS ID Field Test</h1>
+                    <p class="fade-in">Testing the new SIH Problem Statement ID field</p>
                     <p class="made-by">Made by Maximus Consultancy Services</p>
                 </div>
             </div>
         </div>
     </header>
-    
+
     <div class="container">
-        <div class="auth-container">
-            <h2>Admin Login</h2>
-            <form id="adminLoginForm" autocomplete="off">
-                <div class="form-group">
-                    <label for="email" class="required">Admin Email</label>
-                    <div class="input-group">
-                        <input type="email" id="email" required autocomplete="off" value="" placeholder="Enter your admin email">
-                    </div>
+        <div class="card scale-in">
+            <div class="card-header">
+                <h2 class="fade-in">SIH PS ID Field Implementation</h2>
+            </div>
+            <p class="fade-in">This page demonstrates the new SIH Problem Statement ID field that has been added to the team registration form.</p>
+            
+            <div class="form-group">
+                <label for="sihPsId" class="required fade-in">SIH PS ID</label>
+                <div class="input-group">
+                    <input type="number" id="sihPsId" required placeholder="Enter SIH Problem Statement ID" class="fade-in">
                 </div>
-                <div class="form-group">
-                    <label for="password" class="required">Password</label>
-                    <div class="input-group">
-                        <input type="password" id="password" required autocomplete="off" value="" placeholder="Enter your password">
-                    </div>
-                </div>
-                <button type="submit" class="btn">
-Login as Admin
-                </button>
-                <p style="text-align: center; margin-top: 1rem;">
-                    <a href="index.html">Back to User Login</a>
-                </p>
-            </form>
+            </div>
+            
+            <p class="fade-in">The field has been successfully added to the team registration form with the following characteristics:</p>
+            <ul class="fade-in">
+                <li>Input type is set to "number" for numeric input</li>
+                <li>Required field with validation</li>
+                <li>Placeholder text for guidance</li>
+                <li>Proper styling consistent with other form fields</li>
+            </ul>
         </div>
     </div>
 
@@ -75,7 +71,5 @@ Login as Admin
             </div>
         </div>
     </footer>
-
-    <script src="scripts/admin-login.js"></script>
 </body>
 </html>

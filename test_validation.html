@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Registration - SIH 2025 Portal</title>
+    <title>Test Validation - SIH 2025 Portal</title>
     <link rel="stylesheet" href="styles/main.css">
     <!-- Add Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Add favicon -->
     <link rel="icon" type="image/x-icon" href="logo/logo.ico">
-    <!-- Font Awesome removed as per user request -->
 </head>
 <body>
     <header class="header-gradient slide-in-down">
@@ -88,18 +87,7 @@
                         <div class="form-group">
                             <label for="leaderStream" class="required fade-in">Stream</label>
                             <div class="input-group">
-                                <select id="leaderStream" required class="fade-in">
-                                    <option value="">Select Stream</option>
-                                    <option value="CSE">CSE</option>
-                                    <option value="ISE">ISE</option>
-                                    <option value="AIML">AIML</option>
-                                    <option value="CSE-DS">CSE-DS</option>
-                                    <option value="ECE">ECE</option>
-                                    <option value="EEE">EEE</option>
-                                    <option value="CSE-AIML">CSE-AIML</option>
-                                    <option value="CIVIL">CIVIL</option>
-                                    <option value="ICB">ICB</option>
-                                </select>
+                                <input type="text" id="leaderStream" required placeholder="e.g., CSE, ECE, ME" class="fade-in">
                             </div>
                         </div>
                     </div>
@@ -177,18 +165,7 @@
                                 <div class="form-group">
                                     <label class="fade-in">Stream</label>
                                     <div class="input-group">
-                                        <select class="member-stream fade-in" required>
-                                            <option value="">Select Stream</option>
-                                            <option value="CSE">CSE</option>
-                                            <option value="ISE">ISE</option>
-                                            <option value="AIML">AIML</option>
-                                            <option value="CSE-DS">CSE-DS</option>
-                                            <option value="ECE">ECE</option>
-                                            <option value="EEE">EEE</option>
-                                            <option value="CSE-AIML">CSE-AIML</option>
-                                            <option value="CIVIL">CIVIL</option>
-                                            <option value="ICB">ICB</option>
-                                        </select>
+                                        <input type="text" placeholder="Stream" class="member-stream fade-in" required>
                                     </div>
                                 </div>
                             </div>
@@ -274,7 +251,6 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="scripts/team-registration.js"></script>
 </body>
 </html>

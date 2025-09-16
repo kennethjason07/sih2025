@@ -1306,6 +1306,26 @@ a:hover::after {
     color: white;
 }
 
+.made-for-college {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin: 0.5rem 0 0;
+    text-align: center;
+    font-weight: 500;
+    animation: fadeIn 0.8s ease-out;
+    color: white;
+}
+
+.made-for-college {
+    font-size: 0.8rem;
+    opacity: 0.8;
+    margin: 0.5rem 0 0;
+    text-align: center;
+    font-weight: 500;
+    animation: fadeIn 0.8s ease-out;
+    color: white;
+}
+
 @media (max-width: 768px) {
     .logo-container {
         flex-direction: column;
@@ -1352,6 +1372,98 @@ a:hover::after {
 
 .input-group {
     position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.input-group::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--primary), var(--accent));
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+    transform-origin: top;
+}
+
+.input-group:hover::before {
+    transform: scaleY(1);
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: #f8fafc;
+    position: relative;
+    z-index: 1;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    background-color: white;
+    transform: translateY(-2px);
+}
+
+.input-group input::placeholder {
+    color: #94a3b8;
+    transition: opacity 0.3s ease;
+}
+
+.input-group input:focus::placeholder {
+    opacity: 0.7;
+}
+
+/* Special styling for number inputs like SIH PS ID */
+.input-group:has(input[type="number"])::before {
+    background: linear-gradient(to bottom, var(--accent), var(--primary));
+}
+
+.input-group:has(input[type="number"]) input {
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--accent);
+}
+
+.input-group:has(input[type="number"]) input:focus {
+    border-left-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.2);
+}
+
+/* Enhanced focus effects */
+.input-group.focus::before {
+    transform: scaleY(1);
+}
+
+.input-group.focus::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary), var(--accent));
+    animation: slideInLeft 0.3s ease;
+}
+
+/* Animation for input group */
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
 }
 
 .input-group input {
@@ -1656,4 +1768,204 @@ table tr:hover {
 
 .btn-enhanced:hover::after {
     left: 120%;
+}
+
+/* Footer Styles */
+.footer {
+    background: linear-gradient(90deg, var(--dark), #0f172a);
+    color: white;
+    padding: 2rem 0;
+    margin-top: 3rem;
+    border-top: 4px solid var(--primary);
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+}
+
+.footer-text {
+    text-align: center;
+}
+
+.footer-logo {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    margin: 0 auto 0.5rem;
+    display: block;
+}
+
+.footer-text .made-by {
+    margin: 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    font-weight: 500;
+    color: white;
+}
+
+.footer-text .made-for-college {
+    margin: 0.25rem 0 0;
+    font-size: 0.8rem;
+    opacity: 0.8;
+    color: white;
+}
+
+.footer-developers {
+    text-align: center;
+}
+
+.footer-developers h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: white;
+}
+
+.footer-developers ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.footer-developers li {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.footer-copyright {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    width: 100%;
+    text-align: center;
+}
+
+.footer-copyright p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #9ca3af; /* grey color */
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        gap: 1rem;
+    }
+    
+    .footer-developers ul {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+}
+
+/* Modal/Popup Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-lg);
+    max-width: 90%;
+    width: 400px;
+    position: relative;
+    animation: scaleIn 0.4s ease-out;
+    overflow: hidden;
+}
+
+.modal-header {
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 1.25rem;
+    position: relative;
+}
+
+.modal-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent), var(--primary));
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: white;
+    font-size: 1.4rem;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-body p {
+    margin: 0 0 1rem 0;
+    color: var(--dark);
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    background-color: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+}
+
+.btn-close {
+    background: linear-gradient(90deg, #64748b, #475569);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    padding: 0.6rem 1.25rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+    box-shadow: 0 4px 6px rgba(100, 116, 139, 0.2);
+}
+
+.btn-close:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(100, 116, 139, 0.3);
+    animation: pulse 1s infinite;
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+        margin: 1rem;
+    }
+    
+    .modal-body {
+        padding: 1.25rem;
+    }
+    
+    .modal-body p {
+        font-size: 1rem;
+    }
 }
