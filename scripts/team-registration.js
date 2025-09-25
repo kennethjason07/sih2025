@@ -319,7 +319,6 @@ async function handleTeamRegistration(e) {
     // Get form data
     const projectType = document.getElementById('projectType').value;
     const teamName = document.getElementById('teamName').value;
-    const academicYear = document.getElementById('academicYear').value;
     const sihPsId = document.getElementById('sihPsId').value; // Get SIH PS ID
     
     // Get leader details
@@ -375,9 +374,12 @@ async function handleTeamRegistration(e) {
             .insert({
                 team_name: teamName,
                 project_type: projectType,
-                academic_year: academicYear,
                 sih_ps_id: sihPsId, // Add SIH PS ID
-                leader_id: user.id
+                leader_id: user.id,
+                leader_name: leaderDetails.name,
+                stream: leaderDetails.stream,
+                semester: leaderDetails.semester,
+                category: leaderDetails.category
             })
             .select()
             .single();

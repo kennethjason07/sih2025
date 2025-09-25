@@ -1,0 +1,182 @@
+/* Delete Team Modal Styles */
+#deleteConfirmModal .modal-content {
+    max-width: 600px;
+    width: 90%;
+}
+
+#deleteConfirmModal .modal-header {
+    background: #dc3545 !important;
+    color: white;
+}
+
+#deleteConfirmModal .delete-warning {
+    padding: 1rem 0;
+}
+
+#deleteConfirmModal .delete-warning > p {
+    font-size: 1.1rem;
+    color: #dc3545;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+#deleteConfirmModal .delete-details {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+#deleteConfirmModal .delete-details h4 {
+    color: #495057;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+}
+
+#deleteConfirmModal .delete-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+}
+
+#deleteConfirmModal .preserve-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#deleteConfirmModal .delete-list li {
+    padding: 0.5rem 0;
+    color: #dc3545;
+    font-weight: 500;
+}
+
+#deleteConfirmModal .preserve-list li {
+    padding: 0.5rem 0;
+    color: #28a745;
+    font-weight: 500;
+}
+
+#deleteConfirmModal .confirmation-text {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+#deleteConfirmModal .confirmation-text p {
+    margin-bottom: 0.75rem;
+    color: #856404;
+    font-weight: 500;
+}
+
+#deleteConfirmModal .confirm-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+#deleteConfirmModal .confirm-input:focus {
+    outline: none;
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+#deleteConfirmModal .confirm-delete-btn:disabled {
+    background: #6c757d !important;
+    border-color: #6c757d !important;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+#deleteConfirmModal .confirm-delete-btn.enabled {
+    background: #dc3545 !important;
+    border-color: #dc3545 !important;
+    cursor: pointer;
+    opacity: 1;
+}
+
+#deleteConfirmModal .confirm-delete-btn.enabled:hover {
+    background: #c82333 !important;
+    border-color: #bd2130 !important;
+}
+
+/* Delete button in team list */
+.delete-team-btn {
+    background: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: white !important;
+    font-size: 0.8rem !important;
+    padding: 0.4rem 0.8rem !important;
+    margin-left: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.delete-team-btn:hover {
+    background: #c82333 !important;
+    border-color: #bd2130 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+}
+
+.delete-team-btn:active {
+    transform: translateY(0);
+}
+
+/* Team buttons container */
+.team-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.team-buttons button {
+    flex: 0 0 auto;
+}
+
+/* Responsive design for buttons */
+@media (max-width: 768px) {
+    .team-buttons {
+        flex-direction: column;
+    }
+    
+    .team-buttons button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .delete-team-btn {
+        margin-left: 0 !important;
+    }
+}
+
+/* Modal animation improvements */
+#deleteConfirmModal.show .modal-content {
+    animation: deleteModalSlideIn 0.3s ease-out;
+}
+
+@keyframes deleteModalSlideIn {
+    from {
+        transform: translateY(-50px) scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Toast notification for team deletion */
+.delete-success-toast {
+    background: #28a745 !important;
+}
+
+.delete-error-toast {
+    background: #dc3545 !important;
+}

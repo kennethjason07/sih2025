@@ -30,6 +30,23 @@ CREATE TABLE public.team_members (
   CONSTRAINT team_members_pkey PRIMARY KEY (id),
   CONSTRAINT team_members_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.teams(id)
 );
+CREATE TABLE public.team_presentations (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  team_id uuid NOT NULL,
+  presentation_name character varying NOT NULL,
+  file_name character varying NOT NULL,
+  file_path character varying NOT NULL,
+  file_size bigint NOT NULL CHECK (file_size <= 10485760),
+  file_type character varying NOT NULL CHECK (file_type::text = ANY (ARRAY['application/vnd.ms-powerpoint'::character varying, 'application/vnd.openxmlformats-officedocument.presentationml.presentation'::character varying]::text[])),
+  upload_date timestamp with time zone NOT NULL DEFAULT timezone('utc'::text, now()),
+  uploaded_by uuid NOT NULL,
+  is_active boolean NOT NULL DEFAULT true,
+  version integer NOT NULL DEFAULT 1,
+  description text,
+  CONSTRAINT team_presentations_pkey PRIMARY KEY (id),
+  CONSTRAINT team_presentations_team_id_fkey FOREIGN KEY (team_id) REFERENCES public.teams(id),
+  CONSTRAINT team_presentations_uploaded_by_fkey FOREIGN KEY (uploaded_by) REFERENCES auth.users(id)
+);
 CREATE TABLE public.teams (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   team_name character varying NOT NULL UNIQUE,
@@ -41,6 +58,7 @@ CREATE TABLE public.teams (
   members jsonb,
   created_at timestamp without time zone DEFAULT now(),
   project_type character varying,
+  sih_ps_id integer,
   CONSTRAINT teams_pkey PRIMARY KEY (id),
   CONSTRAINT teams_leader_id_fkey FOREIGN KEY (leader_id) REFERENCES auth.users(id)
 );

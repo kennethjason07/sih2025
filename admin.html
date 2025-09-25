@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - SIH 2025 Leader Onboarding</title>
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/delete-team.css">
     <!-- Add Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Add favicon -->
@@ -35,6 +36,18 @@
                 </a>
                 <a href="#" data-view="teams" class="fade-in">
                     Teams
+                </a>
+                <a href="#" data-view="view-ppt" class="fade-in">
+                    View PPT
+                </a>
+                <a href="#" data-view="summary" class="fade-in">
+                    Team Summary
+                </a>
+                <a href="#" data-view="department-summary" class="fade-in">
+                    Department Summary
+                </a>
+                <a href="#" data-view="download-csv" class="fade-in">
+                    Download CSV
                 </a>
             </nav>
             <div class="sidebar-footer">
@@ -125,6 +138,87 @@
                     <div id="resourcesList" class="admin-list">
                         <h4 class="fade-in">Existing Resources</h4>
                         <p class="fade-in">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="card scale-in">
+                    <div class="card-header">
+                        <h3 class="fade-in">Registered Teams</h3>
+                    </div>
+                    <div id="teamsList" class="admin-list">
+                        <h4 class="fade-in">All Teams</h4>
+                        <p class="fade-in">Loading teams...</p>
+                    </div>
+                </div>
+
+                <div class="card scale-in" id="viewPptCard" style="display: none;">
+                    <div class="card-header">
+                        <h3 class="fade-in">📊 Team Presentations</h3>
+                        <p>View and manage team presentation uploads</p>
+                    </div>
+                    <div id="viewPptContent">
+                        <p class="fade-in">Loading team presentations...</p>
+                    </div>
+                </div>
+
+                <div class="card scale-in" id="summaryCard" style="display: none;">
+                    <div class="card-header">
+                        <h3 class="fade-in">Summary Statistics</h3>
+                    </div>
+                    <div id="summaryContent">
+                        <p class="fade-in">Loading summary statistics...</p>
+                    </div>
+                </div>
+
+                <div class="card scale-in" id="downloadCsvCard" style="display: none;">
+                    <div class="card-header">
+                        <h3 class="fade-in">Download Team Data</h3>
+                    </div>
+                    <div class="admin-list">
+                        <div class="list-item">
+                            <h4>Export Team Data</h4>
+                            <p>Download all registered teams and their member information in CSV format with complete registration details.</p>
+                            <p><strong>CSV Format:</strong> Team, Project Type, SIH PS ID, Leader Name, Team Leader Stream, Team Leader Semester, Team Leader Category, Team Registration Date, Position, Students Name, Gender, Dept, Semester, Category, Email, Mob No, Member Registration Date</p>
+                            <button id="downloadCsvPageBtn" class="btn btn-success" style="width: auto; margin-top: 1rem;">
+                                Download CSV File
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card scale-in" id="departmentSummaryCard" style="display: none;">
+                    <div class="card-header">
+                        <h3 class="fade-in">📊 Department-wise Student Summary</h3>
+                        <p>Overview of all students organized by their departments/streams</p>
+                    </div>
+                    <div class="summary-controls">
+                        <div class="filter-controls">
+                            <div class="department-filter">
+                                <select id="adminDepartmentFilter" class="department-select">
+                                    <option value="all">All Departments</option>
+                                    <option value="CSE">CSE</option>
+                                    <option value="ISE">ISE</option>
+                                    <option value="AIML">AIML</option>
+                                    <option value="CSE-DS">CSE-DS</option>
+                                    <option value="ECE">ECE</option>
+                                    <option value="EEE">EEE</option>
+                                    <option value="CSE-AIML">CSE-AIML</option>
+                                    <option value="CIVIL">CIVIL</option>
+                                    <option value="ICB">ICB</option>
+                                    <option value="MECHANICAL">MECHANICAL</option>
+                                </select>
+                            </div>
+                            <div class="search-box">
+                                <input type="text" id="adminSearchStudents" placeholder="Search students..." class="search-input">
+                                <button type="button" class="btn btn-primary" id="adminRefreshSummary">Refresh Data</button>
+                                <button type="button" class="btn btn-success" id="adminDownloadDepartmentCSV" style="display: none;">
+                                    📥 Download CSV
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="adminDepartmentSummaryContainer">
+                        <p class="fade-in">Loading department summary...</p>
                     </div>
                 </div>
             </div>

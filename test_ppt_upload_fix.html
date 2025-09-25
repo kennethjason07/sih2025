@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPT Upload Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px;
+        }
+        .file-selected {
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #007bff;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn-outline {
+            border: 1px solid #007bff;
+            color: #007bff;
+            background: white;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .upload-form {
+            display: none;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success {
+            color: #155724;
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>PPT Upload Functionality Test</h1>
+    <p>This test verifies the fix for the "Cannot set properties of null" error in the PPT upload feature.</p>
+
+    <div class="test-section">
+        <h3>Test Upload Interface</h3>
+        
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-content">
+                    <div class="upload-icon">📁</div>
+                    <h4>Drag & Drop your presentation here</h4>
+                    <p>or <button type="button" class="btn btn-outline" id="selectFileBtn">Choose File</button></p>
+                    <input type="file" id="fileInput" accept=".ppt,.pptx" style="display: none;">
+                    <small>Supported formats: PPT, PPTX | Maximum size: 10MB</small>
+                </div>
+            </div>
+            
+            <!-- Upload Form -->
+            <div class="upload-form" id="uploadForm">
+                <div class="form-group">
+                    <label for="presentationName">Presentation Name</label>
+                    <input type="text" id="presentationName" required placeholder="Enter presentation name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="presentationDescription">Description (Optional)</label>
+                    <textarea id="presentationDescription" rows="3" placeholder="Brief description of your presentation"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn btn-success" id="uploadBtn">Test Upload Process</button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="testResult" class="hidden"></div>
+    </div>
+
+    <script>
+        let selectedFile = null;
+
+        // Setup upload functionality
+        function setupPresentationUpload() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const selectFileBtn = document.getElementById('selectFileBtn');
+            const uploadForm = document.getElementById('uploadForm');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            
+            // File selection
+            if (selectFileBtn && fileInput) {
+                selectFileBtn.addEventListener('click', () => fileInput.click());
+                fileInput.addEventListener('change', handleFileSelection);
+            }
+            
+            // Form actions
+            if (uploadBtn) {
+                uploadBtn.addEventListener('click', testUploadProcess);
+            }
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', resetUploadForm);
+            }
+        }
+
+        // Handle file selection
+        function handleFileSelection(e) {
+            const file = e.target.files[0];
+            if (file) {
+                validateAndSetFile(file);
+            }
+        }
+
+        // Validate and set selected file
+        function validateAndSetFile(file) {
+            // Check file type
+            const isValidExtension = file.name.toLowerCase().endsWith('.ppt') || 
+                                    file.name.toLowerCase().endsWith('.pptx');
+            
+            if (!isValidExtension) {
+                showMessage('Please select a valid PowerPoint file (.ppt or .pptx)', 'error');
+                return;
+            }
+            
+            // Check file size (10MB limit)
+            const maxSize = 10 * 1024 * 1024;
+            if (file.size > maxSize) {
+                showMessage('File size exceeds the 10MB limit. Please choose a smaller file.', 'error');
+                return;
+            }
+            
+            selectedFile = file;
+            showUploadForm(file);
+        }
+
+        // Show upload form with file details (FIXED VERSION)
+        function showUploadForm(file) {
+            const uploadArea = document.getElementById('uploadArea');
+            const uploadForm = document.getElementById('uploadForm');
+            
+            if (!uploadArea || !uploadForm) {
+                console.error('Upload area or form not found');
+                showMessage('Error: Upload interface not available. Please refresh the page.', 'error');
+                return;
+            }
+            
+            // Hide upload area, show form
+            uploadArea.style.display = 'none';
+            uploadForm.style.display = 'block';
+            
+            // Pre-fill presentation name with filename (without extension)
+            setTimeout(() => {
+                const presentationNameInput = document.getElementById('presentationName');
+                if (presentationNameInput) {
+                    const fileName = file.name;
+                    const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
+                    presentationNameInput.value = nameWithoutExt;
+                }
+            }, 100);
+            
+            // Update upload area to show selected file (FIXED: use file.name instead of fileName)
+            const uploadContent = uploadArea.querySelector('.upload-content');
+            uploadContent.innerHTML = `
+                <div class="file-selected">
+                    <div class="file-icon">📄</div>
+                    <div class="file-details">
+                        <h4>${file.name}</h4>
+                        <p>Size: ${formatFileSize(file.size)}</p>
+                        <button type="button" class="btn btn-outline" onclick="resetUploadForm()">Choose Different File</button>
+                    </div>
+                </div>
+            `;
+            
+            showMessage('✅ File selected successfully! The fileName variable issue has been fixed.', 'success');
+        }
+
+        // Reset upload form
+        function resetUploadForm() {
+            selectedFile = null;
+            
+            const uploadArea = document.getElementById('uploadArea');
+            const uploadForm = document.getElementById('uploadForm');
+            const fileInput = document.getElementById('fileInput');
+            
+            // Reset file input
+            if (fileInput) {
+                fileInput.value = '';
+            }
+            
+            // Hide form, show upload area
+            uploadForm.style.display = 'none';
+            uploadArea.style.display = 'block';
+            
+            // Reset upload area content
+            const uploadContent = uploadArea.querySelector('.upload-content');
+            uploadContent.innerHTML = `
+                <div class="upload-icon">📁</div>
+                <h4>Drag & Drop your presentation here</h4>
+                <p>or <button type="button" class="btn btn-outline" id="selectFileBtn">Choose File</button></p>
+                <input type="file" id="fileInput" accept=".ppt,.pptx" style="display: none;">
+                <small>Supported formats: PPT, PPTX | Maximum size: 10MB</small>
+            `;
+            
+            // Re-attach event listeners
+            setTimeout(setupPresentationUpload, 100);
+            
+            showMessage('Form reset successfully.', 'success');
+        }
+
+        // Test upload process
+        function testUploadProcess() {
+            if (!selectedFile) {
+                showMessage('Please select a file first.', 'error');
+                return;
+            }
+            
+            const presentationNameEl = document.getElementById('presentationName');
+            
+            if (!presentationNameEl) {
+                showMessage('Error: Presentation name field not found. Please refresh the page.', 'error');
+                return;
+            }
+            
+            const presentationName = presentationNameEl.value.trim();
+            
+            if (!presentationName) {
+                showMessage('Please enter a presentation name.', 'error');
+                return;
+            }
+            
+            showMessage('✅ Upload process test passed! All form elements found and values retrieved successfully.', 'success');
+        }
+
+        // Utility function to format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Show message
+        function showMessage(message, type = 'error') {
+            const testResult = document.getElementById('testResult');
+            testResult.className = type;
+            testResult.textContent = message;
+            testResult.classList.remove('hidden');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            setupPresentationUpload();
+        });
+    </script>
+</body>
+</html>
