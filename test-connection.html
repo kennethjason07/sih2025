@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Connection Test</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .test-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #cce7ff;
+            color: #0c5460;
+            border: 1px solid #b3d9ff;
+        }
+        button {
+            background: linear-gradient(90deg, #4361ee, #3f37c9);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.3);
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-green {
+            background-color: #28a745;
+        }
+        .status-red {
+            background-color: #dc3545;
+        }
+        .status-yellow {
+            background-color: #ffc107;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔍 Supabase Connection Test</h1>
+        <p>This page will help you diagnose the 429 rate limiting issue.</p>
+        
+        <div id="results">
+            <div class="test-result info">
+                <strong>Status:</strong> <span id="connectionStatus">Testing...</span>
+            </div>
+        </div>
+        
+        <button onclick="testConnection()">🔄 Test Connection</button>
+        <button onclick="testAuth()">🔐 Test Auth Status</button>
+        <button onclick="clearAndRetry()">🧹 Clear Cache & Retry</button>
+        
+        <div class="test-result info">
+            <h3>Rate Limiting Information:</h3>
+            <ul>
+                <li><strong>Supabase Free Tier Limits:</strong></li>
+                <li>Email requests: 30 per hour per IP</li>
+                <li>Auth requests: 50-100 per minute</li>
+                <li>Database requests: 500 per minute</li>
+            </ul>
+        </div>
+        
+        <div class="test-result info">
+            <h3>Solutions if 429 persists:</h3>
+            <ol>
+                <li><strong>Wait 10-15 minutes</strong> for rate limits to reset</li>
+                <li><strong>Check different network</strong> (mobile hotspot)</li>
+                <li><strong>Upgrade Supabase plan</strong> if needed</li>
+                <li><strong>Contact Supabase support</strong> if issue persists</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://ghsiujmrspjjrmgsckba.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imdoc2l1am1yc3BqanJtZ3Nja2JhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5NDI0MTAsImV4cCI6MjA3MzUxODQxMH0.42kIctZtu8-aswDFgg4og51wd-OYIaT_TSsUx8XHlFs';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        function addResult(message, type = 'info') {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.innerHTML = `
+                <span class="status-indicator status-${type === 'success' ? 'green' : type === 'error' ? 'red' : 'yellow'}"></span>
+                ${message}
+            `;
+            results.appendChild(div);
+        }
+        
+        async function testConnection() {
+            document.getElementById('connectionStatus').textContent = 'Testing connection...';
+            
+            try {
+                // Simple API call to test connection
+                const { data, error } = await supabase.from('users').select('id').limit(1);
+                
+                if (error) {
+                    if (error.message.includes('429')) {
+                        addResult('❌ Rate limit hit (429 error). Please wait 10-15 minutes before testing again.', 'error');
+                        document.getElementById('connectionStatus').textContent = 'Rate Limited';
+                    } else {
+                        addResult(`❌ Connection error: ${error.message}`, 'error');
+                        document.getElementById('connectionStatus').textContent = 'Connection Failed';
+                    }
+                } else {
+                    addResult('✅ Connection successful! Supabase is working normally.', 'success');
+                    document.getElementById('connectionStatus').textContent = 'Connected';
+                }
+            } catch (error) {
+                addResult(`❌ Unexpected error: ${error.message}`, 'error');
+                document.getElementById('connectionStatus').textContent = 'Error';
+            }
+        }
+        
+        async function testAuth() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (user) {
+                    addResult(`✅ User logged in: ${user.email}`, 'success');
+                } else {
+                    addResult('ℹ️ No user currently logged in', 'info');
+                }
+            } catch (error) {
+                if (error.message.includes('429')) {
+                    addResult('❌ Auth rate limit hit. Please wait before testing again.', 'error');
+                } else {
+                    addResult(`❌ Auth error: ${error.message}`, 'error');
+                }
+            }
+        }
+        
+        function clearAndRetry() {
+            // Clear results
+            document.getElementById('results').innerHTML = `
+                <div class="test-result info">
+                    <strong>Status:</strong> <span id="connectionStatus">Testing...</span>
+                </div>
+            `;
+            
+            // Clear any cached auth data
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            addResult('🧹 Cache cleared. Retrying connection...', 'info');
+            
+            setTimeout(() => {
+                testConnection();
+            }, 1000);
+        }
+        
+        // Auto-run connection test when page loads
+        window.addEventListener('load', () => {
+            setTimeout(testConnection, 1000);
+        });
+        
+        // Show current time for reference
+        setInterval(() => {
+            const now = new Date().toLocaleTimeString();
+            document.getElementById('connectionStatus').textContent += ` (${now})`;
+        }, 60000);
+    </script>
+</body>
+</html>

@@ -228,6 +228,7 @@ function addMemberField() {
                         <option value="CSE-AIML">CSE-AIML</option>
                         <option value="CIVIL">CIVIL</option>
                         <option value="ICB">ICB</option>
+                        <option value="MECHANICAL">Mechanical</option>
                     </select>
                 </div>
             </div>
@@ -302,6 +303,13 @@ function addMemberField() {
 
 async function handleTeamRegistration(e) {
     e.preventDefault();
+    
+    // Check if registrations are open
+    const registrationStatus = await checkRegistrationStatus();
+    if (!registrationStatus.isOpen) {
+        showModal(`Registration Closed: ${registrationStatus.message}`);
+        return;
+    }
     
     // Perform validation
     const teamSizeValidation = validateTeamSize();
@@ -421,3 +429,111 @@ async function handleTeamRegistration(e) {
         alert('Error registering team: ' + error.message);
     }
 }
+
+// Function to check if registrations are currently open
+async function checkRegistrationStatus() {
+    try {
+        console.log('Checking registration status...');
+        
+        const { data: status, error } = await supabase
+            .from('registration_status')
+            .select('is_open, message')
+            .order('updated_at', { ascending: false })
+            .limit(1)
+            .single();
+        
+        if (error) {
+            console.error('Error checking registration status:', error);
+            // Default to closed if there's an error or no data
+            return {
+                isOpen: false,
+                message: 'Unable to verify registration status. Please contact administrator.'
+            };
+        }
+        
+        console.log('Registration status:', status);
+        
+        return {
+            isOpen: status.is_open,
+            message: status.message || 'Registration status check failed'
+        };
+        
+    } catch (error) {
+        console.error('Error checking registration status:', error);
+        return {
+            isOpen: false,
+            message: 'Unable to verify registration status. Please contact administrator.'
+        };
+    }
+}
+
+// Function to initialize the page and check registration status
+async function initializePage() {
+    console.log('Initializing team registration page...');
+    
+    // Check registration status on page load
+    const registrationStatus = await checkRegistrationStatus();
+    
+    if (!registrationStatus.isOpen) {
+        // Hide the registration form and show closed message
+        const card = document.querySelector('.card');
+        if (card) {
+            card.innerHTML = `
+                <div class="card-header">
+                    <h2 class="fade-in">🚫 Registration Closed</h2>
+                    <p class="fade-in">New team registrations are currently closed</p>
+                </div>
+                <div class="registration-closed-message">
+                    <div class="status-icon">🔒</div>
+                    <h3>Team Registration is Currently Closed</h3>
+                    <p class="message">${registrationStatus.message}</p>
+                    <div class="info-box">
+                        <h4>For Existing Teams:</h4>
+                        <p>If you have already registered your team, you can still access your dashboard and upload presentations.</p>
+                        <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+                    </div>
+                    <div class="contact-info">
+                        <h4>Need Help?</h4>
+                        <p>Contact your administrator if you believe this is an error or if you need assistance.</p>
+                    </div>
+                </div>
+            `;
+        }
+    } else {
+        console.log('Registrations are open. Page ready for team registration.');
+    }
+}
+
+// Page initialization
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the page with registration status check
+    initializePage();
+    
+    // Set up form submission handler
+    if (teamForm) {
+        teamForm.addEventListener('submit', handleTeamRegistration);
+    }
+    
+    // Set up add member button
+    if (addMemberBtn) {
+        addMemberBtn.addEventListener('click', function() {
+            addMemberField();
+            updateTeamSizeIndicator();
+        });
+    }
+    
+    // Add real-time validation
+    addRealTimeValidation();
+    
+    // Add focus/blur events to existing inputs
+    const inputs = document.querySelectorAll('.input-group input, .input-group select');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.closest('.input-group').classList.add('focus');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.closest('.input-group').classList.remove('focus');
+        });
+    });
+});

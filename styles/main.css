@@ -4424,3 +4424,240 @@ table tr:hover {
     color: white;
     box-shadow: 0 2px 4px rgba(248, 113, 113, 0.3);
 }
+
+/* Password Reset Success Message Styles */
+.password-reset-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border: 1px solid #c3e6cb;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.password-reset-success p {
+    margin: 0;
+    color: #155724;
+    font-weight: 500;
+}
+
+.password-reset-info {
+    background: linear-gradient(135deg, #cce7ff 0%, #b3d9ff 100%);
+    border: 1px solid #b3d9ff;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.password-reset-info p {
+    margin: 0;
+    color: #0c5460;
+    font-weight: 500;
+}
+
+/* Password Strength Indicator Styles */
+.password-strength {
+    margin: 1rem 0;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.password-strength.weak {
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+    border: 1px solid #ffcdd2;
+    color: #c62828;
+}
+
+.password-strength.medium {
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    border: 1px solid #ffe0b2;
+    color: #ef6c00;
+}
+
+.password-strength.strong {
+    background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+    border: 1px solid #c8e6c9;
+    color: #2e7d32;
+}
+
+.password-strength.very-strong {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border: 1px solid #bbdefb;
+    color: #1565c0;
+}
+
+.password-strength strong {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.password-strength small {
+    opacity: 0.8;
+    font-size: 0.85rem;
+}
+
+/* Toggle Password Button Styles */
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2rem;
+    user-select: none;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group input {
+    padding-right: 3rem;
+}
+
+/* Registration Status Styles */
+.registration-closed-message {
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    margin: 1rem 0;
+}
+
+.registration-closed-message .status-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.registration-closed-message h3 {
+    color: var(--danger);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.registration-closed-message .message {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.registration-closed-message .info-box {
+    background: #d1e7dd;
+    border: 2px solid var(--success);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.registration-closed-message .info-box h4 {
+    color: #0a3622;
+    margin-bottom: 0.5rem;
+}
+
+.registration-closed-message .info-box p {
+    color: #0a3622;
+    margin-bottom: 1rem;
+}
+
+.registration-closed-message .contact-info {
+    background: #d1ecf1;
+    border: 2px solid var(--primary);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.registration-closed-message .contact-info h4 {
+    color: #055160;
+    margin-bottom: 0.5rem;
+}
+
+.registration-closed-message .contact-info p {
+    color: #055160;
+}
+
+/* Admin Registration Status Styles */
+.registration-status-container {
+    display: grid;
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.current-status {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 2px solid var(--border-color);
+}
+
+.status-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 8px;
+    background: var(--bg-secondary);
+}
+
+.status-indicator {
+    font-size: 1.5rem;
+}
+
+.status-text {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.status-text.open {
+    color: var(--success);
+}
+
+.status-text.closed {
+    color: var(--danger);
+}
+
+.status-message {
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    font-style: italic;
+}
+
+.status-message.open {
+    background: #d1e7dd;
+    color: #0a3622;
+    border: 1px solid var(--success);
+}
+
+.status-message.closed {
+    background: #f8d7da;
+    color: #58151c;
+    border: 1px solid var(--danger);
+}
+
+.last-updated {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.registration-controls {
+    background: var(--card-bg);
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 2px solid var(--border-color);
+}

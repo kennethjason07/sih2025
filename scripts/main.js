@@ -55,6 +55,9 @@ function showAuthForm() {
                     <i class="fas fa-sign-in-alt"></i> Login
                 </button>
                 <p style="text-align: center; margin-top: 1rem;">
+                    <a href="#" id="showPasswordReset">Forgot Password?</a>
+                </p>
+                <p style="text-align: center; margin-top: 0.5rem;">
                     Don't have an account? <a href="#" id="showSignup">Sign Up</a>
                 </p>
                 <p style="text-align: center;">
@@ -98,6 +101,7 @@ function showAuthForm() {
     
     document.getElementById('authForm').addEventListener('submit', handleLogin);
     document.getElementById('showSignup').addEventListener('click', showSignupForm);
+    document.getElementById('showPasswordReset').addEventListener('click', showPasswordResetForm);
 }
 
 function showSignupForm() {
@@ -165,11 +169,139 @@ function showSignupForm() {
     document.getElementById('showLogin').addEventListener('click', showAuthForm);
 }
 
+function showPasswordResetForm() {
+    app.innerHTML = `
+        <div class="auth-container">
+            <h2><i class="fas fa-key"></i> Reset Password</h2>
+            <p style="text-align: center; margin-bottom: 1.5rem; color: #666;">
+                Enter your email address and we'll send you a link to reset your password.
+            </p>
+            <form id="passwordResetForm" autocomplete="off">
+                <div class="form-group">
+                    <label for="resetEmail" class="required">Email</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope icon"></i>
+                        <input type="email" id="resetEmail" required autocomplete="off" value="" placeholder="Enter your email">
+                    </div>
+                </div>
+                <button type="submit" class="btn">
+                    <i class="fas fa-paper-plane"></i> Send Reset Link
+                </button>
+                <p style="text-align: center; margin-top: 1rem;">
+                    Remember your password? <a href="#" id="showLogin">Back to Login</a>
+                </p>
+            </form>
+        </div>
+    `;
+    
+    // Clear any existing values
+    document.getElementById('resetEmail').value = '';
+    
+    // Add event listeners for input focus and blur
+    const emailInput = document.getElementById('resetEmail');
+    const emailIcon = emailInput.previousElementSibling;
+    
+    // Handle email input
+    emailInput.addEventListener('input', function() {
+        if (this.value.length > 0) {
+            emailIcon.style.opacity = '0';
+            this.removeAttribute('placeholder');
+        } else {
+            emailIcon.style.opacity = '1';
+            this.setAttribute('placeholder', 'Enter your email');
+        }
+    });
+    
+    document.getElementById('passwordResetForm').addEventListener('submit', handlePasswordReset);
+    document.getElementById('showLogin').addEventListener('click', showAuthForm);
+}
+
+// Rate limiting variables
+let lastPasswordResetAttempt = 0;
+const PASSWORD_RESET_COOLDOWN = 60000; // 1 minute cooldown
+
+async function handlePasswordReset(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('resetEmail').value;
+    const now = Date.now();
+    
+    // Check rate limiting
+    if (now - lastPasswordResetAttempt < PASSWORD_RESET_COOLDOWN) {
+        const remainingTime = Math.ceil((PASSWORD_RESET_COOLDOWN - (now - lastPasswordResetAttempt)) / 1000);
+        alert(`Please wait ${remainingTime} seconds before requesting another password reset.`);
+        return;
+    }
+    
+    // Show loading interface
+    showLoadingInterface('Sending reset email...');
+    
+    try {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/reset-password.html'
+        });
+        
+        // Update last attempt time
+        lastPasswordResetAttempt = now;
+        
+        hideLoadingInterface();
+        
+        if (error) {
+            // Handle specific error types
+            if (error.message.includes('429') || error.message.includes('rate limit')) {
+                alert('Too many password reset requests. Please wait a few minutes and try again.');
+            } else if (error.message.includes('email not found') || error.message.includes('user not found')) {
+                alert('If an account with this email exists, you will receive a password reset link.');
+            } else {
+                alert('Error: ' + error.message);
+            }
+            return;
+        }
+        
+        // Show success message
+        app.innerHTML = `
+            <div class="auth-container">
+                <h2><i class="fas fa-check-circle" style="color: #28a745;"></i> Email Sent!</h2>
+                <p style="text-align: center; margin-bottom: 1.5rem; color: #666;">
+                    We've sent a password reset link to <strong>${email}</strong>.
+                    Please check your email and click the link to reset your password.
+                </p>
+                <div style="background: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;">
+                    <p style="margin: 0; color: #155724; text-align: center;">
+                        <i class="fas fa-info-circle"></i> Don't forget to check your spam folder if you don't see the email.
+                    </p>
+                </div>
+                <button class="btn" onclick="showAuthForm()">
+                    <i class="fas fa-arrow-left"></i> Back to Login
+                </button>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Password reset error:', error);
+        hideLoadingInterface();
+        alert('An unexpected error occurred. Please try again.');
+    }
+}
+
+// Rate limiting for login attempts
+let lastLoginAttempt = 0;
+const LOGIN_COOLDOWN = 3000; // 3 seconds cooldown between attempts
+let failedLoginCount = 0;
+
 async function handleLogin(e) {
     e.preventDefault();
     
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    const now = Date.now();
+    
+    // Check rate limiting
+    if (now - lastLoginAttempt < LOGIN_COOLDOWN) {
+        const remainingTime = Math.ceil((LOGIN_COOLDOWN - (now - lastLoginAttempt)) / 1000);
+        alert(`Please wait ${remainingTime} seconds before trying again.`);
+        return;
+    }
     
     // Show loading interface
     showLoadingInterface('Logging in...');
@@ -180,11 +312,26 @@ async function handleLogin(e) {
             password
         });
         
+        // Update last attempt time
+        lastLoginAttempt = now;
+        
         if (error) {
+            failedLoginCount++;
             hideLoadingInterface();
-            alert('Login failed: ' + error.message);
+            
+            // Handle specific error types
+            if (error.message.includes('429') || error.message.includes('rate limit')) {
+                alert('Too many login attempts. Please wait a few minutes and try again.');
+            } else if (failedLoginCount >= 3) {
+                alert('Multiple failed attempts detected. Please double-check your credentials or reset your password.');
+            } else {
+                alert('Login failed: ' + error.message);
+            }
             return;
         }
+        
+        // Reset failed count on successful login
+        failedLoginCount = 0;
         
         currentUser = data.user;
         

@@ -270,6 +270,7 @@ function addMemberRow() {
                         <option value="CSE-AIML">CSE-AIML</option>
                         <option value="CIVIL">CIVIL</option>
                         <option value="ICB">ICB</option>
+                        <option value="MECHANICAL">Mechanical</option>
                     </select>
                 </div>
             </div>
@@ -368,13 +369,27 @@ async function checkTeamRegistrationStatus() {
             // Team is registered, show registered interface
             showRegisteredTeamInterface(teamData);
         } else {
-            // No team registered, show registration form
-            showTeamRegistrationForm();
+            // No team registered, check if registrations are open
+            const registrationStatus = await checkRegistrationStatus();
+            
+            if (registrationStatus.isOpen) {
+                // Registrations are open, show registration form
+                showTeamRegistrationForm();
+            } else {
+                // Registrations are closed, show closure message
+                showRegistrationClosedMessage(registrationStatus.message);
+            }
         }
         
     } catch (error) {
         console.error('Error checking team status:', error);
-        showTeamRegistrationForm();
+        // Check registration status even on error
+        const registrationStatus = await checkRegistrationStatus();
+        if (registrationStatus.isOpen) {
+            showTeamRegistrationForm();
+        } else {
+            showRegistrationClosedMessage(registrationStatus.message);
+        }
     }
 }
 
@@ -641,6 +656,7 @@ function renderTeamRegistrationForm(isUpdate = false) {
                                 <option value="CSE-AIML">CSE-AIML</option>
                                 <option value="CIVIL">CIVIL</option>
                                 <option value="ICB">ICB</option>
+                                <option value="MECHANICAL">Mechanical</option>
                             </select>
                         </div>
                     </div>
@@ -734,6 +750,7 @@ function renderTeamRegistrationForm(isUpdate = false) {
                                         <option value="CSE-AIML">CSE-AIML</option>
                                         <option value="CIVIL">CIVIL</option>
                                         <option value="ICB">ICB</option>
+                                        <option value="MECHANICAL">Mechanical</option>
                                     </select>
                                 </div>
                             </div>
@@ -3172,4 +3189,72 @@ function updateUSNSummary() {
         statNumbers[1].textContent = pending;
         statNumbers[2].textContent = percentage + '%';
     }
+}
+
+// Function to check if registrations are currently open
+async function checkRegistrationStatus() {
+    try {
+        console.log('Checking registration status in dashboard...');
+        
+        const { data: status, error } = await supabase
+            .from('registration_status')
+            .select('is_open, message')
+            .order('updated_at', { ascending: false })
+            .limit(1)
+            .single();
+        
+        if (error) {
+            console.error('Error checking registration status:', error);
+            // Default to closed if there's an error or no data
+            return {
+                isOpen: false,
+                message: 'Unable to verify registration status. Please contact administrator.'
+            };
+        }
+        
+        console.log('Registration status:', status);
+        
+        return {
+            isOpen: status.is_open,
+            message: status.message || 'Registration status check failed'
+        };
+        
+    } catch (error) {
+        console.error('Error checking registration status:', error);
+        return {
+            isOpen: false,
+            message: 'Unable to verify registration status. Please contact administrator.'
+        };
+    }
+}
+
+// Show registration closed message in dashboard
+function showRegistrationClosedMessage(message) {
+    const content = document.getElementById('dashboard-content');
+    
+    content.innerHTML = `
+        <div class="card">
+            <div class="card-header">
+                <h3><i class="fas fa-lock"></i> Team Registration</h3>
+            </div>
+            <div class="registration-closed-message">
+                <div class="status-icon">🔒</div>
+                <h3>Team Registration is Currently Closed</h3>
+                <p class="message">${message}</p>
+                <div class="info-box">
+                    <h4>What can you do?</h4>
+                    <ul>
+                        <li><strong>View Team Information:</strong> If your team is already registered, you can view your team details in other sections</li>
+                        <li><strong>Upload Presentations:</strong> Use the "Presentations" section to upload your team's presentation files</li>
+                        <li><strong>Check Announcements:</strong> Stay updated with the latest announcements</li>
+                        <li><strong>Access Resources:</strong> Download helpful resources for the hackathon</li>
+                    </ul>
+                </div>
+                <div class="contact-info">
+                    <h4>Need Help?</h4>
+                    <p>Contact your administrator if you believe this is an error or if you need assistance with registration.</p>
+                </div>
+            </div>
+        </div>
+    `;
 }

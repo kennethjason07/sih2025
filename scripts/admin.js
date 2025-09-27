@@ -56,6 +56,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('resourceForm').addEventListener('submit', handleAddResource);
     logoutBtn.addEventListener('click', handleLogout);
     
+    // Add registration status form event listener (will be attached when needed)
+    setTimeout(() => {
+        const registrationStatusForm = document.getElementById('registrationStatusForm');
+        if (registrationStatusForm) {
+            registrationStatusForm.addEventListener('submit', handleRegistrationStatusUpdate);
+        }
+    }, 100);
+    
     // The refresh button is handled dynamically in the loadTeams function
     
     // Load initial data
@@ -88,18 +96,23 @@ function switchView(view) {
         case 'dashboard':
             // Show statistics and both forms/lists
             document.querySelector('.admin-content .card:nth-child(1)').style.display = 'block'; // Statistics
-            document.querySelector('.admin-content .card:nth-child(2)').style.display = 'block'; // Announcements
-            document.querySelector('.admin-content .card:nth-child(3)').style.display = 'block'; // Resources
-            document.querySelector('.admin-content .card:nth-child(4)').style.display = 'block'; // Teams
+            document.querySelector('.admin-content .card:nth-child(3)').style.display = 'block'; // Announcements
+            document.querySelector('.admin-content .card:nth-child(4)').style.display = 'block'; // Resources
+            document.querySelector('.admin-content .card:nth-child(5)').style.display = 'block'; // Teams
+            break;
+        case 'registration-control':
+            document.getElementById('registrationControlCard').style.display = 'block';
+            // Load registration status when switching to registration control
+            loadRegistrationStatus();
             break;
         case 'announcements':
-            document.querySelector('.admin-content .card:nth-child(2)').style.display = 'block'; // Announcements
+            document.querySelector('.admin-content .card:nth-child(3)').style.display = 'block'; // Announcements
             break;
         case 'resources':
-            document.querySelector('.admin-content .card:nth-child(3)').style.display = 'block'; // Resources
+            document.querySelector('.admin-content .card:nth-child(4)').style.display = 'block'; // Resources
             break;
         case 'teams':
-            document.querySelector('.admin-content .card:nth-child(4)').style.display = 'block'; // Teams
+            document.querySelector('.admin-content .card:nth-child(5)').style.display = 'block'; // Teams
             // Load teams when switching to teams view
             loadTeams();
             // Test if download button is available
@@ -2933,5 +2946,189 @@ function hideLoadingInterface() {
     const overlay = document.getElementById('loadingOverlay');
     if (overlay) {
         overlay.style.display = 'none';
+    }
+}
+
+// Registration Status Management Functions
+
+// Load current registration status
+async function loadRegistrationStatus() {
+    try {
+        console.log('Loading registration status...');
+        
+        // Fetch current registration status
+        const { data: status, error } = await supabase
+            .from('registration_status')
+            .select('*')
+            .order('updated_at', { ascending: false })
+            .limit(1)
+            .single();
+        
+        if (error) {
+            console.error('Error fetching registration status:', error);
+            updateRegistrationStatusDisplay(
+                false, 
+                'Error loading registration status. Please check database setup.', 
+                'Unknown'
+            );
+            return;
+        }
+        
+        console.log('Registration status loaded:', status);
+        
+        // Update UI with current status
+        updateRegistrationStatusDisplay(
+            status.is_open,
+            status.message,
+            status.updated_at
+        );
+        
+        // Update form fields with current values
+        const statusSelect = document.getElementById('registrationStatusSelect');
+        const messageInput = document.getElementById('statusMessageInput');
+        
+        if (statusSelect) {
+            statusSelect.value = status.is_open.toString();
+        }
+        
+        if (messageInput) {
+            messageInput.value = status.message || '';
+        }
+        
+    } catch (error) {
+        console.error('Error loading registration status:', error);
+        updateRegistrationStatusDisplay(
+            false, 
+            'Error loading registration status: ' + error.message, 
+            'Unknown'
+        );
+    }
+}
+
+// Update the registration status display in UI
+function updateRegistrationStatusDisplay(isOpen, message, lastUpdated) {
+    const statusIndicator = document.getElementById('statusIndicator');
+    const statusText = document.getElementById('statusText');
+    const statusMessage = document.getElementById('statusMessage');
+    const lastUpdatedElement = document.getElementById('lastUpdated');
+    
+    if (statusIndicator) {
+        statusIndicator.innerHTML = isOpen ? '🟢' : '🔴';
+        statusIndicator.className = `status-indicator ${isOpen ? 'open' : 'closed'}`;
+    }
+    
+    if (statusText) {
+        statusText.textContent = isOpen ? 'OPEN' : 'CLOSED';
+        statusText.className = `status-text ${isOpen ? 'open' : 'closed'}`;
+    }
+    
+    if (statusMessage) {
+        statusMessage.textContent = message || 'No message set';
+        statusMessage.className = `status-message ${isOpen ? 'open' : 'closed'}`;
+    }
+    
+    if (lastUpdatedElement) {
+        const formattedDate = lastUpdated !== 'Unknown' 
+            ? new Date(lastUpdated).toLocaleString()
+            : 'Unknown';
+        lastUpdatedElement.textContent = `Last updated: ${formattedDate}`;
+    }
+}
+
+// Handle registration status update
+async function handleRegistrationStatusUpdate(e) {
+    e.preventDefault();
+    
+    const statusSelect = document.getElementById('registrationStatusSelect');
+    const messageInput = document.getElementById('statusMessageInput');
+    
+    if (!statusSelect || !messageInput) {
+        alert('Form elements not found');
+        return;
+    }
+    
+    const isOpen = statusSelect.value === 'true';
+    const message = messageInput.value.trim();
+    
+    if (!message) {
+        alert('Please enter a status message');
+        return;
+    }
+    
+    try {
+        console.log('Updating registration status...', { isOpen, message });
+        
+        showLoadingInterface('Updating registration status...');
+        
+        // Update registration status in database
+        const { data, error } = await supabase
+            .from('registration_status')
+            .upsert([
+                {
+                    is_open: isOpen,
+                    message: message,
+                    updated_at: new Date().toISOString(),
+                    updated_by: currentUser.id
+                }
+            ], {
+                onConflict: 'id'
+            })
+            .select()
+            .single();
+        
+        if (error) {
+            console.error('Error updating registration status:', error);
+            hideLoadingInterface();
+            alert('Error updating registration status: ' + error.message);
+            return;
+        }
+        
+        console.log('Registration status updated successfully:', data);
+        
+        hideLoadingInterface();
+        
+        // Show success message
+        alert(`Registration status updated successfully!\n\nStatus: ${isOpen ? 'OPEN' : 'CLOSED'}\nMessage: ${message}`);
+        
+        // Refresh the status display
+        loadRegistrationStatus();
+        
+    } catch (error) {
+        console.error('Error updating registration status:', error);
+        hideLoadingInterface();
+        alert('Error updating registration status: ' + error.message);
+    }
+}
+
+// Global function to check if registrations are open (used by other pages)
+async function checkRegistrationStatus() {
+    try {
+        const { data: status, error } = await supabase
+            .from('registration_status')
+            .select('is_open, message')
+            .order('updated_at', { ascending: false })
+            .limit(1)
+            .single();
+        
+        if (error) {
+            console.error('Error checking registration status:', error);
+            // Default to closed if there's an error
+            return {
+                isOpen: false,
+                message: 'Unable to verify registration status. Please try again later.'
+            };
+        }
+        
+        return {
+            isOpen: status.is_open,
+            message: status.message
+        };
+        
+    } catch (error) {
+        console.error('Error checking registration status:', error);
+        return {
+            isOpen: false,
+            message: 'Unable to verify registration status. Please try again later.'
+        };
     }
 }

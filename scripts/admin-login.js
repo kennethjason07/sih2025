@@ -62,6 +62,9 @@ function showAdminLoginForm() {
     });
     
     adminLoginForm.addEventListener('submit', handleAdminLogin);
+    
+    // Add password reset event listener
+    document.getElementById('adminPasswordReset').addEventListener('click', showAdminPasswordResetForm);
 }
 
 async function handleAdminLogin(e) {
@@ -202,5 +205,109 @@ function hideLoadingInterface() {
     const loadingOverlay = document.getElementById('loading-overlay');
     if (loadingOverlay) {
         loadingOverlay.style.display = 'none';
+    }
+}
+
+// Password reset functionality
+function showAdminPasswordResetForm() {
+    const container = document.querySelector('.auth-container');
+    container.innerHTML = `
+        <h2>Reset Admin Password</h2>
+        <p style="text-align: center; margin-bottom: 1.5rem; color: #666;">
+            Enter your admin email address and we'll send you a link to reset your password.
+        </p>
+        <form id="adminPasswordResetForm" autocomplete="off">
+            <div class="form-group">
+                <label for="resetEmail" class="required">Admin Email</label>
+                <div class="input-group">
+                    <input type="email" id="resetEmail" required autocomplete="off" value="" placeholder="Enter your admin email">
+                </div>
+            </div>
+            <button type="submit" class="btn">
+                Send Reset Link
+            </button>
+            <p style="text-align: center; margin-top: 1rem;">
+                Remember your password? <a href="#" id="backToAdminLogin">Back to Login</a>
+            </p>
+            <p style="text-align: center; margin-top: 0.5rem;">
+                <a href="index.html">Back to User Login</a>
+            </p>
+        </form>
+    `;
+    
+    // Add event listeners
+    document.getElementById('adminPasswordResetForm').addEventListener('submit', handleAdminPasswordReset);
+    document.getElementById('backToAdminLogin').addEventListener('click', () => {
+        location.reload(); // Reload the page to show the original login form
+    });
+}
+
+// Rate limiting variables for admin password reset
+let lastAdminPasswordResetAttempt = 0;
+const ADMIN_PASSWORD_RESET_COOLDOWN = 60000; // 1 minute cooldown
+
+async function handleAdminPasswordReset(e) {
+    e.preventDefault();
+    
+    const email = document.getElementById('resetEmail').value;
+    const now = Date.now();
+    
+    // Check rate limiting
+    if (now - lastAdminPasswordResetAttempt < ADMIN_PASSWORD_RESET_COOLDOWN) {
+        const remainingTime = Math.ceil((ADMIN_PASSWORD_RESET_COOLDOWN - (now - lastAdminPasswordResetAttempt)) / 1000);
+        alert(`Please wait ${remainingTime} seconds before requesting another password reset.`);
+        return;
+    }
+    
+    // Show loading interface
+    showLoadingInterface('Sending reset email...');
+    
+    try {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + '/admin-reset-password.html'
+        });
+        
+        // Update last attempt time
+        lastAdminPasswordResetAttempt = now;
+        
+        hideLoadingInterface();
+        
+        if (error) {
+            // Handle specific error types
+            if (error.message.includes('429') || error.message.includes('rate limit')) {
+                alert('Too many password reset requests. Please wait a few minutes and try again.');
+            } else if (error.message.includes('email not found') || error.message.includes('user not found')) {
+                alert('If an account with this email exists, you will receive a password reset link.');
+            } else {
+                alert('Error: ' + error.message);
+            }
+            return;
+        }
+        
+        // Show success message
+        const container = document.querySelector('.auth-container');
+        container.innerHTML = `
+            <h2 style="color: #28a745;">Email Sent!</h2>
+            <p style="text-align: center; margin-bottom: 1.5rem; color: #666;">
+                We've sent a password reset link to <strong>${email}</strong>.
+                Please check your email and click the link to reset your password.
+            </p>
+            <div style="background: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;">
+                <p style="margin: 0; color: #155724; text-align: center;">
+                    💡 Don't forget to check your spam folder if you don't see the email.
+                </p>
+            </div>
+            <button class="btn" onclick="location.reload()">
+                Back to Admin Login
+            </button>
+            <p style="text-align: center; margin-top: 1rem;">
+                <a href="index.html">Back to User Login</a>
+            </p>
+        `;
+        
+    } catch (error) {
+        console.error('Admin password reset error:', error);
+        hideLoadingInterface();
+        alert('An unexpected error occurred. Please try again.');
     }
 }

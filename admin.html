@@ -28,6 +28,9 @@
                 <a href="#" data-view="dashboard" id="dashboardLink" class="fade-in">
                     Dashboard
                 </a>
+                <a href="#" data-view="registration-control" class="fade-in">
+                    Registration Control
+                </a>
                 <a href="#" data-view="announcements" class="active fade-in">
                     Announcements
                 </a>
@@ -78,6 +81,45 @@
                         <div class="stat-item">
                             <h4 id="totalMembers" class="pulse-animation">0</h4>
                             <p>Total Members Registered</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card scale-in" id="registrationControlCard" style="display: none;">
+                    <div class="card-header">
+                        <h3 class="fade-in">🎯 Registration Control</h3>
+                        <p>Control whether new team registrations are allowed</p>
+                    </div>
+                    <div class="registration-status-container">
+                        <div class="current-status">
+                            <h4 class="fade-in">Current Status</h4>
+                            <div id="registrationStatusDisplay" class="status-display">
+                                <span class="status-indicator" id="statusIndicator"></span>
+                                <span id="statusText">Loading...</span>
+                            </div>
+                            <p id="statusMessage" class="status-message">Loading status...</p>
+                            <small id="lastUpdated" class="last-updated">Last updated: Loading...</small>
+                        </div>
+                        
+                        <div class="registration-controls">
+                            <h4 class="fade-in">Change Registration Status</h4>
+                            <form id="registrationStatusForm">
+                                <div class="form-group">
+                                    <label class="fade-in">Registration Status</label>
+                                    <select id="registrationStatusSelect" class="fade-in">
+                                        <option value="true">🟢 Open - Allow new registrations</option>
+                                        <option value="false">🔴 Closed - Block new registrations</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="statusMessageInput" class="fade-in">Status Message</label>
+                                    <textarea id="statusMessageInput" rows="3" class="fade-in" placeholder="Enter message to show to users when they try to register..."></textarea>
+                                    <small class="fade-in">This message will be displayed to users on the registration page</small>
+                                </div>
+                                <button type="submit" class="btn btn-primary pulse-animation">
+                                    Update Registration Status
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
